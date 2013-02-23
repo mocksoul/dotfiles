@@ -1,0 +1,390 @@
+source ~/.vim/vam-setup
+
+"let loaded_matchparen = 1
+
+" enable filetype plugin
+filetype plugin indent on
+
+set nocompatible    " get rid of owful vi-compat mode
+set background=dark " obviously we have dark console
+set wildmenu        " turn on wildmenu
+set wildmode=list:longest
+set wildignore=*.pyc,*.pyo,*.o,*.bak,*.swo,*.swp
+set ruler           " always show ruler
+set cmdheight=1     " commandbar height
+set nostartofline   " leave cursor where it was
+set number          " show line numbers
+set numberwidth=5   " we have files with 9999 lines? Yes! )
+"set lazyredraw      " do not redraw while running macros (much faster)
+set hidden          " allow buffers to have changes and be hidden
+set t_Co=256        " we have colorful terminal, isnt we?
+set nostartofline   " try to preserve column position during PgUp/PgDown
+
+" backspace conf
+set backspace=eol,start,indent
+set whichwrap+=<,>,[,],h,l
+
+" searching
+set ignorecase
+set smartcase
+set hlsearch    " highlight search things
+set incsearch   " make search act like in modern browsers
+
+" Files, backups and undo
+set encoding=utf-8
+set nobackup
+set nowritebackup
+set nowb
+set noswapfile
+"set undodir=~/.vim/runtime/undodir
+"set undofile
+
+" Text, tab and indent related
+set expandtab
+set shiftwidth=4
+set tabstop=4
+set softtabstop=4
+set smarttab
+set lbr
+set tw=500
+set ai  " auto indent
+set copyindent  " copy prev indent on auto detecting
+set si  " smart indent
+set nowrap
+"set textwidth=120
+
+" select when using mouse
+set selectmode=mouse
+
+" keep 50 lines of command line history
+set history=50
+
+" show (partial) commands
+set showcmd
+set showmode
+
+" show tab characters and trailing whitespace (visual whitespace)
+set list
+set listchars=tab:»·,trail:·,extends:#,nbsp:.
+"set listchars+=eol:¬
+
+" visual cues
+set showmatch
+set matchtime=5
+set hlsearch
+set incsearch       " do not highlight as you type search phraze
+set scrolloff=7     " keep 5 lines (top/bottom) for scope
+set sidescrolloff=7 " keep 5 lines at the size
+set laststatus=2    " always show the status line
+"set statusline=[%02n]\ %f\ %(\[%M%R%H]%)%=\ %4l,%02c%2V\ %P%*
+set statusline=%f%m%r%h%w\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
+set foldmethod=marker
+
+au BufEnter * set cursorline
+au BufLeave * set nocursorline
+
+syntax on
+
+" NetRW settings
+let g:netrw_list_hide = '\.py[co]$'
+
+" Defaults for vertical windows
+"set winwidth=40
+"set winminwidth=40
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" KEY MAPPINGS """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+set pastetoggle=<F2>
+nnoremap ; :
+
+map <silent> <PageUp> <C-U>
+map <silent> <PageDown> <C-D>
+imap <silent> <PageUp> <C-O><PageUp>
+imap <silent> <PageDown> <C-O><PageDown>
+map <silent> <C-Up> <C-Y>
+map <silent> <C-Down> <C-E>
+imap <silent> <C-Up> <C-O><C-Up>
+imap <silent> <C-Down> <C-O><C-Down>
+
+"map <M-F8> :TlistToggle<CR>
+"map <F7> :NERDTreeFind<CR> <F9><F9> <C-w><Left><C-w><Left><C-w><Left>
+"map <M-F7> :NERDTreeMirror<CR><C-w><Right>:NERDTreeFind<CR> <F9><F9> <C-w><Left><C-w><Left><C-w><Left>
+"map <M-S-F7> :NERDTreeClose<CR> <C-w><Left><C-w><Left>
+"imap <F7> <Esc><F7>
+"imap <M-F7> <Esc><M-F7>
+"imap <M-S-F7> <C-o><M-S-F7>
+
+"map <F9> :TMiniBufExplorer<CR>
+"imap <F9> <C-o><F9>
+
+map <F11> :Shell !<CR>
+imap <F11> <C-o><F11>
+
+" <C-w>d to delete current buffer without distorting windows
+"map <C-w>d <C-w><Up>d<C-w><Down>
+"imap <C-w>d <Esc><C-w>d<Insert>
+
+" ALT-F8 to disable/enable autoindenting
+":nnoremap <M-F9> :setl noai nocin nosi inde=<CR>
+
+
+" < or > will let you indent/dedent selected lines
+vnoremap < <gv
+vnoremap > >gv
+"vmap <tab> >gv
+"vmap <s-tab> <gv
+
+" <c-s> to write current buffer
+map <C-s> :w<CR>
+imap <C-s> <C-o><C-s>
+
+map <CAPSLOCK> :set keymap=russian-jcukenwin
+
+" Window splitting
+map <C-w>t :belowright sp<CR>
+imap <C-w>t <C-o>:belowright sp<CR>
+map <C-w>l :belowright vs<CR>
+imap <C-w>l <C-o>:belowright vs<CR>
+imap <C-w>q <C-o><C-w>q
+map <C-x> :belowright 1split<CR><A-PageDown><C-w><Up>:bwipe<CR>
+imap <C-x> <C-o><C-x>
+
+" Navigation keys:
+" Ctrl-PageUp/PageDown for tab switching
+" Alt-PageUp/PageDown for buffer switching
+" Alt+Left/Down/Up/Right for window switching
+
+map <A-PageDown> :bnext<CR>
+map <A-PageUp> :bprev<CR>
+map <A-Left> <C-w><Left>
+map <A-Right> <C-w><Right>
+map <A-Down> <C-w><Down>
+map <A-Up> <C-w><Up>
+imap <A-PageDown> <C-o><A-PageDown>
+imap <A-PageUp> <C-o><A-PageUp>
+imap <A-Left> <C-o><A-Left>
+imap <A-Right> <C-o><A-Right>
+imap <A-Down> <C-o><A-Down>
+imap <A-Up> <C-o><A-Up>
+
+if &term =~ '^screen'
+    " tmux will send xterm-style keys when xterm-keys is on
+    execute "set <xUp>=\e[1;*A"
+    execute "set <xDown>=\e[1;*B"
+    execute "set <xRight>=\e[1;*C"
+    execute "set <xLeft>=\e[1;*D"
+endif
+
+"function! CloseTab()
+"  if winnr("$") == 1 && tabpagenr("$") > 1 && tabpagenr() > 1 && tabpagenr() < tabpagenr("$")
+"    tabclose | tabprev
+"  else
+"    q
+"  endif
+"endfunction
+"map <M-Down> :call CloseTab()<CR>
+
+" Undo in insert mode
+"imap <c-z> <c-o>u
+imap <c-z> <c-o><c-z>
+
+" Python section
+let python_highlight_all = 1
+"au FileType python syn keyword pythonDecorator True None False self
+au BufEnter,BufRead *.py setlocal nosmartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+au BufEnter,BufRead *.rst setlocal tabstop=3 shiftwidth=3 softtabstop=3 textwidth=80
+au BufRead *.py highlight BadWhitespace ctermbg=red guibg=red
+au BufRead *.py match BadWhitespace /^\t\+/
+au BufRead *.py match BadWhitespace /\s\+$/
+au BufWritePre *.py :%s/\s\+$//e
+
+" Return to the last cursor position
+autocmd BufReadPost *
+  \ if line("'\"") > 1 && line("'\"") <= line("$") |
+  \     exe "normal! g`\"" |
+  \ endif
+
+:nmap <C-N><C-N> :set invnumber<CR>
+
+:nmap <C-t> :tabnew<CR>
+:imap <C-t> <Esc>:tabnew<CR>
+
+" Completion options
+set completeopt=longest,menuone
+
+" Language
+set keymap=russian-jcukenwin
+set iminsert=0
+set imsearch=0
+"set imcmdline=0
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGINS """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" buftabs
+"let g:buftabs_only_basename = 1
+"let g:buftabs_in_statusline = 1
+set laststatus=2
+"let g:buftabs_active_highlight_group = "Visual"
+"let g:buftabs_marker_start = "["
+"let g:buftabs_marker_end = "]"
+"let g:buftabs_separator = ":"
+
+
+" TagList
+let g:ctags_statusline = 1
+let generate_tags = 1
+let Tlist_Use_Horiz_Window = 0
+let Tlist_Use_Right_Window = 1
+let Tlist_Compact_Format = 1
+let Tlist_Exit_OnlyWindow = 1
+let Tlist_GainFocus_On_ToggleOpen = 1
+let Tlist_File_Fold_Auto_Close = 1
+
+" Project
+let loaded_project = 1
+let g:proj_window_width = 30
+
+" NERD Tree
+let NERDChristmasTree = 1
+let NERDTreeChDirMode = 2
+let NERDTreeQuitOnOpen = 0
+let NERDTreeWinSize = 30
+let NERDTreeIgnor = ['\~$', '\.py[co]$', '\.so$']
+let NERDTreeHighlightCursorline = 1
+
+color gentooish
+
+highlight LineNr term=None cterm=None ctermfg=DarkGray ctermbg=235 guibg=235
+highlight CursorLine term=None cterm=None ctermbg=235 guibg=235
+
+
+" Shell config
+let g:PROMPT = '{vsh} '
+
+" vimpython3
+let python_highlight_builtins = 1
+let python_highlight_builtin_objs = 1
+let python_highlight_builtin_funcs = 1
+let python_highlight_exceptions = 1
+let python_highlight_string_formatting = 1
+let python_highlight_string_format = 1
+let python_highlight_string_templates = 1
+let python_highlight_indent_errors = 1
+let python_highlight_space_errors = 1
+let python_highlight_doctests = 1
+let python_highlight_all = 1
+let python_slow_sync = 1
+
+" SuperTab
+let g:SuperTabLongestEnhanced = 1
+let g:SuperTabLongestHighlight = 0
+let g:SuperTabDefaultCompletionType = "context"
+
+" VimWiki
+ActivateAddons vimwiki
+nmap <Leader>wtl <Plug>VimwikiTableMoveColumnLeft
+nmap <Leader>wtr <Plug>VimwikiTableMoveColumnRight
+let g:vimwiki_folding = 1
+let g:vimwiki_fold_lists = 1
+let g:vimwiki_hl_headers = 0
+let g:vimwiki_hl_cb_checked = 1
+let g:vimwiki_auto_checkbox = 1
+let g:vimwiki_table_mappings = 0
+let g:vimwiki_table_auto_fmt = 0
+
+" Tagbar
+ActivateAddons Tagbar
+"let g:tagbar_ctags_bin = "/opt/local/bin/ctags"
+let g:tagbar_autoopen = 0
+let g:tagbar_autofocus = 1
+let g:tagbar_compact = 0
+let g:tagbar_width = 30
+let g:tagbar_sort = 0 " order in file
+let g:tagbar_autoshowtag = 1
+map <F8> :TagbarOpen fjh<CR>
+imap <F8> <Esc>><F8>
+map <S-F8> :TagbarClose<CR>
+imap <S-F8> <C-o><S-F8>
+
+" bufExplorer
+ActivateAddons bufexplorer.zip
+let g:bufExplorerShowRelativePath = 1
+let g:bufExplorerSortBy = "fullpath"
+let g:bufExplorerSplitOutPathName = 0
+let g:bufExplorerFindActive = 0
+
+" Clam
+ActivateAddons Clam
+
+" Gundo
+ActivateAddons Gundo
+
+map <F1> :BufExplorer<CR>
+imap <F1> <C-o><F1>
+
+" Session
+ActivateAddons session%3150
+set sessionoptions-=help
+"set sessionoptions-=winsize
+set sessionoptions-=blank
+set sessionoptions-=options
+
+let g:session_persist_globals = []
+let g:session_autoload = 0
+"call add(g:session_persist_globals, 'g:syntastic_python_checker_prog')
+
+" Syntastic
+ActivateAddons Syntastic
+let g:syntastic_check_on_open = 1
+let g:syntastic_auto_loc_list = 2  " close auto, open manually
+let g:syntastic_enable_balloons = 0
+let g:syntastic_loc_list_height = 10
+let g:syntastic_echo_current_error = 1
+let g:syntastic_python_checker_prog = 'flake8'
+
+ActivateAddons VOoM
+"ActivateAddons SuperTab
+ActivateAddons SuperTab_continued.
+ActivateAddons snipmate-snippets
+ActivateAddons vim-ft-rst_header
+ActivateAddons Shell
+ActivateAddons surround
+ActivateAddons repeat
+ActivateAddons pythoncomplete
+ActivateAddons python%790
+ActivateAddons vim-addon-local-vimrc
+ActivateAddons Mercurial
+ActivateAddons RST_Tables_works_with_non-english_langu
+ActivateAddons deb
+
+" i could'nt find any get_number_of_visible_lines function, so i made my own.
+function GetNumberOfVisibleLines()
+  let cur_line = line(".")
+  let cur_col = virtcol(".")
+  normal H
+  let top_line = line(".")
+  normal L
+  let bot_line = line(".")
+  execute "normal " . cur_line . "G"
+  execute "normal " . cur_col . "|"
+  return bot_line - top_line
+endfunc
+
+" noremap <PageUp> 39<C-U>:set scroll=0<CR>
+function! MyPageUp()
+  let visible_lines = GetNumberOfVisibleLines()
+  execute "normal " . visible_lines . "\<C-U>:set scroll=0\r"
+endfunction
+
+" noremap <PageDown> 39<C-D>:set scroll=0<CR>
+function! MyPageDown()
+  let visible_lines = GetNumberOfVisibleLines()
+  execute "normal " . visible_lines . "\<C-D>:set scroll=0\r"
+endfunction
+
+"noremap <PageUp> :call MyPageUp()<CR>
+"noremap <PageDown> :call MyPageDown()<CR>
