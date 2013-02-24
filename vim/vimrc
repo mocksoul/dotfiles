@@ -1,3 +1,6 @@
+runtime bundle/pathogen/autoload/pathogen.vim
+execute pathogen#infect()
+
 source ~/.vim/vam-setup
 
 "let loaded_matchparen = 1
@@ -316,9 +319,6 @@ let g:bufExplorerShowRelativePath = 1
 let g:bufExplorerSortBy = "fullpath"
 let g:bufExplorerSplitOutPathName = 0
 let g:bufExplorerFindActive = 0
-
-" Clam
-ActivateAddons Clam
 
 " Gundo
 ActivateAddons Gundo

@@ -1,1 +1,3 @@
-vim/bundle/clam  = [hg]ssh://hg@bitbucket.org/sjl/clam.vim/
+vim/vim/bundle/clam          = [hg]  ssh://hg@bitbucket.org/sjl/clam.vim/
+vim/vim/bundle/pathogen      = [git] git://github.com/tpope/vim-pathogen.git
+vim/vim/bundle/voom          = [git] git://github.com/vim-voom/vim-voom.github.com.git
