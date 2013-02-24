@@ -346,7 +346,6 @@ let g:syntastic_loc_list_height = 10
 let g:syntastic_echo_current_error = 1
 let g:syntastic_python_checker_prog = 'flake8'
 
-ActivateAddons VOoM
 "ActivateAddons SuperTab
 ActivateAddons SuperTab_continued.
 ActivateAddons snipmate-snippets
