@@ -1,6 +1,6 @@
 [submodule "vim/vim/bundle/voom"]
 	path = vim/vim/bundle/voom
-	url = git://github.com/vim-voom/vim-voom.github.com.git
+	url = git://github.com/vim-scripts/VOoM.git
 [submodule "vim/vim/bundle/pathogen"]
 	path = vim/vim/bundle/pathogen
 	url = git://github.com/tpope/vim-pathogen.git
