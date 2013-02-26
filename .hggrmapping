@@ -2,5 +2,6 @@ vim_clam                       = ssh://hg@bitbucket.org/sjl/clam.vim
 vim_gundo                      = ssh://hg@bitbucket.org/sjl/gundo.vim
 vim_syntastic                  = git://github.com/scrooloose/syntastic
 vim_vam                        = git://github.com/MarcWeber/vim-addon-manager.git
+vim_vam_knownrepos             = git://github.com/MarcWeber/vim-addon-manager-known-repositories
 vim_voom                       = git://github.com/vim-scripts/VOoM.git
 vim_wiki                       = http://code.google.com/p/vimwiki
