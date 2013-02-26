@@ -50,9 +50,9 @@ for dir in s:mdirs
         call mkdir(expand(dir), 'p')
     endif
 endfor
-let &undodir = s:mdirs[0]
-let &backupdir = s:mdirs[1]
-let &directory = s:mdirs[2]
+exec 'set undodir=' . s:mdirs[0]
+exec 'set backupdir=' . s:mdirs[1]
+exec 'set directory=' . s:mdirs[2]
 " Make and set undo, backup and swap directories }}}
 
 set complete=.,w,b,u,t
