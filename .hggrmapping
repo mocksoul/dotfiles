@@ -1,3 +1,4 @@
 vim_clam                       = ssh://hg@bitbucket.org/sjl/clam.vim/
+vim_vam                        = git://github.com/MarcWeber/vim-addon-manager.git
 vim_voom                       = git://github.com/vim-scripts/VOoM.git
 vim_wiki                       = http://code.google.com/p/vimwiki
