@@ -413,7 +413,7 @@ let g:bufExplorerFindActive = 0
 noremap <F1> :BufExplorer<cr>
 inoremap <F1> <c-o><F1>
 " }}}
-" o tagbar {{{
+" * tagbar {{{
 ActivateAddons Tagbar
 "let g:tagbar_ctags_bin = "/opt/local/bin/ctags"
 let g:tagbar_autoopen = 0
