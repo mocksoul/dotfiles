@@ -6,7 +6,7 @@ source ~/.vim/vam-setup
 filetype plugin indent on
 set nocompatible                 " git rid of awful vi-compat mode
 set encoding=utf-8
-set modelines=0
+set modelines=1
 set ruler                        " always show
 set ttyfast
 set visualbell
