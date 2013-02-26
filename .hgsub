@@ -1,3 +1,0 @@
-vim/vim/addons/clam          = [hg]  ssh://hg@bitbucket.org/sjl/clam.vim/
-vim/vim/addons/vimwiki       = [hg]  http://code.google.com/p/vimwiki
-vim/vim/addons/voom          = [git] git://github.com/vim-scripts/VOoM.git

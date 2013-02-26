@@ -1,4 +1,0 @@
-[submodule "vim/vim/addons/voom"]
-	path = vim/vim/addons/voom
-	url = git://github.com/vim-scripts/VOoM.git
-
