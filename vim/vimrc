@@ -327,6 +327,15 @@ set langmap=ёйцукенгшщзхъфывапролджэячсмитьбюЁ
 
 " Language conf }}}
 
+" Copy/Paste {{{
+function! g:CopyTextPlease()
+    normal !gv
+    silent '<,'>w !xsel -i -b
+endfunction
+noremap p :set paste<cr>:r!xsel -o -b<cr>:set nopaste<cr>
+noremap y :<c-u>call g:CopyTextPlease()<cr>
+" Copy/Paste }}}
+
 " Activate default set of plugins {{{
 " * powerline {{{
 ActivateAddons powerline
