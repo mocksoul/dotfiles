@@ -384,7 +384,6 @@ let g:pymode_indent = 1
 let g:pymode_syntax = 1
 let g:pymode_syntax_all = 1
 let g:pymode_syntax_slow_sync = 0
-
 " }}}
 " * syntastic {{{
 ActivateAddons Syntastic
@@ -528,5 +527,3 @@ let g:SuperTabDefaultCompletionType = "context"
 "ActivateAddons RST_Tables_works_with_non-english_langu
 "ActivateAddons deb
 "
-
-
