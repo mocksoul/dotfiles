@@ -41,7 +41,6 @@ set undoreload=10000             " save undo then reloading file (so we can undo
 set nobackup                     " dont want backups anymore
 set nowritebackup                " dont want backups anymore
 set noswapfile                   " swap file is not needed as well
-
 set pastetoggle=<F2>
 
 " Make and set undo, backup and swap directories {{{
