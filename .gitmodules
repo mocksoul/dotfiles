@@ -1,7 +1,4 @@
-[submodule "vim/vim/bundle/voom"]
-	path = vim/vim/bundle/voom
+[submodule "vim/vim/addons/voom"]
+	path = vim/vim/addons/voom
 	url = git://github.com/vim-scripts/VOoM.git
-[submodule "vim/vim/bundle/pathogen"]
-	path = vim/vim/bundle/pathogen
-	url = git://github.com/tpope/vim-pathogen.git
 

@@ -1,3 +1,3 @@
-vim/vim/bundle/clam          = [hg]  ssh://hg@bitbucket.org/sjl/clam.vim/
-vim/vim/bundle/pathogen      = [git] git://github.com/tpope/vim-pathogen.git
-vim/vim/bundle/voom          = [git] git://github.com/vim-scripts/VOoM.git
+vim/vim/addons/clam          = [hg]  ssh://hg@bitbucket.org/sjl/clam.vim/
+vim/vim/addons/vimwiki       = [hg]  http://code.google.com/p/vimwiki
+vim/vim/addons/voom          = [git] git://github.com/vim-scripts/VOoM.git
