@@ -38,26 +38,23 @@ set foldmethod=marker
 set foldlevelstart=0
 set undofile                     " persistent undo is better than backups!
 set undoreload=10000             " save undo then reloading file (so we can undo reload), only if <10000 chars
-set undodir=~/.cache/vim/undo/   " directory to save all undos
-set backupdir=~/.cache/vim/backup/ " directory to save backups (but we dont want by default)
-set directory=~/.cache/vim/swap/ " directory to save swap files (but we dont want by default)
 set nobackup                     " dont want backups anymore
 set nowritebackup                " dont want backups anymore
 set noswapfile                   " swap file is not needed as well
 
 set pastetoggle=<F2>
 
-" Make backup, undo and swap dirs {{{
-if !isdirectory(expand(&undodir))
-    call mkdir(expand(&undodir), "-p")
-endif
-if !isdirectory(expand(&backupdir))
-    call mkdir(expand(&backupdir), "-p")
-endif
-if !isdirectory(expand(&directory))
-    call mkdir(expand(&directory), "-p")
-endif
-" Make backup, undo and swap dirs }}}
+" Make and set undo, backup and swap directories {{{
+let s:mdirs = ['~/.cache/vim/undo', '~/.cache/vim/backup', '~/.cache/vim/swap']
+for dir in s:mdirs
+    if !isdirectory(expand(dir))
+        call mkdir(expand(dir), 'p')
+    endif
+endfor
+let &undodir = s:mdirs[0]
+let &backupdir = s:mdirs[1]
+let &directory = s:mdirs[2]
+" Make and set undo, backup and swap directories }}}
 
 set complete=.,w,b,u,t
 set completeopt=longest,menuone,preview
