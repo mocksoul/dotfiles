@@ -366,7 +366,7 @@ ActivateAddons gundo
 nnoremap <F5> :GundoToggle<cr>
 " }}}
 " * pymode {{{
-ActivateAddons Python-mode-klen
+ActivateAddons pymode
 let g:pymode_doc = 1
 let g:pymode_doc_key = 'M'
 let g:pymode_run = 1
