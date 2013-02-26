@@ -1,3 +1,3 @@
-vim/vim/addons/clam            = vim/vim/addons/clam            8533fffd9fbb690dfc8e334f91a10c72e35a6dce
-vim/vim/addons/vimwiki         = vim/vim/addons/vimwiki         2fd5d75c0b427118c2a518fff7628e6a1a4c7c7e
-vim/vim/addons/voom            = vim/vim/addons/voom            42e70f98a5950e636ac38df2f9855bd1fd00a7bc
+vim/vim/addons/clam = vim_clam 8533fffd9fbb690dfc8e334f91a10c72e35a6dce
+vim/vim/addons/vimwiki = vim_wiki 2fd5d75c0b427118c2a518fff7628e6a1a4c7c7e
+vim/vim/addons/voom = vim_voom f5eff5a6f090ad843c0bae4ac4318eda5e09a9c5
