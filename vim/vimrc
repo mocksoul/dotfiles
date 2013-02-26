@@ -391,7 +391,7 @@ let g:syntastic_echo_current_error = 1
 let g:syntastic_python_checker_prog = 'flake8'
 " }}}
 " * session {{{
-ActivateAddons session%3150
+ActivateAddons session
 set sessionoptions-=help
 set sessionoptions-=blank
 set sessionoptions-=options
