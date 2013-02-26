@@ -3,6 +3,7 @@ vim/vim/addons/gundo = vim_gundo  8c570a493d260890242cbdc5a22d8500dc4604cb
 vim/vim/addons/pymode = vim_pymode 2ba84f8638800bf13eacb6089667cf923975ea3d
 vim/vim/addons/session = vim_session f43d075f9e34b8c66c8d7bb1880f0527ebdd3ac9
 vim/vim/addons/syntastic = vim_syntastic 80dcc6077ecef7b2c5dd67d962628066e0936844
+vim/vim/addons/tagbar = vim_tagbar b29b9f4c1c854e7622b3d4c7c585780eadda77be
 vim/vim/addons/vam-known-repos = vim_vam_knownrepos a2284afa01063a6208f543589638897d5c380894
 vim/vim/addons/vam = vim_vam    cde4076a1ea9f42b247cd2ae8351888a891c45e0
 vim/vim/addons/vimwiki = vim_wiki   2fd5d75c0b427118c2a518fff7628e6a1a4c7c7e

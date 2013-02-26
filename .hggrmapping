@@ -3,6 +3,7 @@ vim_gundo                      = ssh://hg@bitbucket.org/sjl/gundo.vim
 vim_pymode                     = git://github.com/klen/python-mode
 vim_session                    = git://github.com/xolox/vim-session
 vim_syntastic                  = git://github.com/scrooloose/syntastic
+vim_tagbar                     = git://github.com/majutsushi/tagbar
 vim_vam                        = git://github.com/MarcWeber/vim-addon-manager.git
 vim_vam_knownrepos             = git://github.com/MarcWeber/vim-addon-manager-known-repositories
 vim_voom                       = git://github.com/vim-scripts/VOoM.git
