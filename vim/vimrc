@@ -382,7 +382,7 @@ let g:pymode_syntax_all = 1
 let g:pymode_syntax_slow_sync = 0
 " }}}
 " * syntastic {{{
-ActivateAddons Syntastic
+ActivateAddons syntastic
 let g:syntastic_check_on_open = 1
 let g:syntastic_auto_loc_list = 2  " close auto, open manually
 let g:syntastic_enable_ballons = 0
