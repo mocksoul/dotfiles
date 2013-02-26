@@ -401,7 +401,7 @@ let g:session_autoload = 0
 " call add(g:session_persist_globals, 'g:syntastic_python_checker_prog')
 " }}}
 " * bufexplorer {{{
-ActivateAddons bufexplorer.zip
+ActivateAddons bufexplorer
 let g:bufExplorerShowRelativePath = 1
 let g:bufExplorerSortBy = "fullpath"
 let g:bufExplorerSplitOutPathName = 0

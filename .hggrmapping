@@ -1,3 +1,4 @@
+vim_bufexplorer                = git://github.com/vim-scripts/bufexplorer.zip.git
 vim_clam                       = ssh://hg@bitbucket.org/sjl/clam.vim
 vim_gundo                      = ssh://hg@bitbucket.org/sjl/gundo.vim
 vim_pymode                     = git://github.com/klen/python-mode
