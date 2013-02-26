@@ -362,7 +362,7 @@ let g:clam_autoreturn = 1
 let g:clam_debug = 0
 " }}}
 " * gundo {{{
-ActivateAddons Gundo
+ActivateAddons gundo
 nnoremap <F5> :GundoToggle<cr>
 " }}}
 " * pymode {{{
