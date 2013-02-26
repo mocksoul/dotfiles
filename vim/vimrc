@@ -508,11 +508,7 @@ let g:SuperTabLongestEnhanced = 1
 let g:SuperTabLongestHighlight = 0
 let g:SuperTabDefaultCompletionType = "context"
 
-
-"" VimWiki {{{
-""ActivateAddons vimwiki
-"
-"
+" VimWiki {{{
 ""ActivateAddons SuperTab
 "ActivateAddons SuperTab_continued.
 "ActivateAddons snipmate-snippets
