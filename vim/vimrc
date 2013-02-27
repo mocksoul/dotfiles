@@ -317,19 +317,10 @@ set keymap=russian-jcukenwin
 set iminsert=0
 set imsearch=0
 set imcmdline=0
-"map <CAPSLOCK> :set keymap=russian-jcukenwin
-"map <C-t> :set keymap=russian-jcukenwin
-map <F2> i<C-^><Esc>
-imap <F2> <C-^>
+map <F3> i<C-^><Esc>
+imap <F3> <C-^>
 
-"imap :!setxkbmap us,ru
-"nmap :!setxkbmap ru,us
-
-"set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯЖ;ABCDEFGHIJKLMNOPQRSTUVWXYZ:,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz
-"set langmap=ЁЙЦУКЕHГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ;wertyuiop[]asdfghjkl\\;'zxcvbnm\\,.~QWERTYUIOP{}ASDFGHJKL:\\"ZXCVBNM<>
-"set langmap=ёйцукенгшщзхъфывапролджэячсмитьбю
 set langmap=ёйцукенгшщзхъфывапролджэячсмитьбюЁЙЦУКЕHГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ;~qwertyuiop[]asdfghjkl\\;'zxcvbnm\\,.~QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>
-
 " Language conf }}}
 
 " Copy/Paste {{{
