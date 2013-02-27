@@ -534,19 +534,8 @@ endif
 
 " Fix tmux/xterm keys }}}
 
-let loaded_matchparen = 1
-
 " backspace conf
 set whichwrap+=<,>,[,],h,l
-
-" Project
-let loaded_project = 1
-let g:proj_window_width = 30
-
-" SuperTab
-let g:SuperTabLongestEnhanced = 1
-let g:SuperTabLongestHighlight = 0
-let g:SuperTabDefaultCompletionType = "context"
 
 " VimWiki {{{
 ""ActivateAddons SuperTab
