@@ -488,9 +488,6 @@ imap <F2> <c-o><F2>
 " Python {{{
 augroup ft_python
     au!
-
-    "au FileType python setlocal define=^\s*\\(def\\\\|class\\)
-
     au FileType iabbrev <buffer> afo assert False, "Okay"
     au FileType python
         \ if exists("python_space_error_highlight") |
