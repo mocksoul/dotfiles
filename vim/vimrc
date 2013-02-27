@@ -179,6 +179,14 @@ noremap <silent> <C-Down> <C-E>
 imap <silent> <C-Up> <C-O><C-Up>
 imap <silent> <C-Down> <C-O><C-Down>
 
+" Make vim to scroll by visible lines, not by physical (while wrapping)
+noremap j gj
+noremap k gk
+noremap <Up> g<Up>
+noremap <Down> g<Down>
+inoremap <Up> <c-o><Up>
+inoremap <Down> <c-o><Down>
+
 " PageUp/PageDown hack {{{
 function! GetNumberOfVisibleLines()
   let cur_line = line(".")
