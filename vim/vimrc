@@ -85,7 +85,7 @@ let g:netrw_list_hide = '\.py[co]$'
 
 " Wildmenu completion {{{
 set wildmenu
-set wildmode=list:longest
+set wildmode=list:longest,full
 
 set wildignore+=.hg,.git,.svn                    " version control
 set wildignore+=*.aux,*.out,*.toc                " latex intermediate files
