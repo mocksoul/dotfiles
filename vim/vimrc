@@ -537,7 +537,7 @@ endif
 " backspace conf
 set whichwrap+=<,>,[,],h,l
 
-" VimWiki {{{
+" Missing addons {{{
 ""ActivateAddons SuperTab
 "ActivateAddons SuperTab_continued.
 "ActivateAddons snipmate-snippets
@@ -551,4 +551,4 @@ set whichwrap+=<,>,[,],h,l
 "ActivateAddons Mercurial
 "ActivateAddons RST_Tables_works_with_non-english_langu
 "ActivateAddons deb
-"
+" }}}
