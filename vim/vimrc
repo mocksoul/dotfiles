@@ -119,7 +119,7 @@ set autoindent
 set smartindent
 set copyindent
 set scrolloff=7                     " keep 7 lines (top/bottom) for scope
-set sidescrolloff=10                " keep 7 lines at the size
+set sidescrolloff=10                " keep 10 lines at the size
 set virtualedit=block,onemore       " allow to past EOL in Visual block mode
 " Tabs, spaces, wrapping, indent }}}
 
