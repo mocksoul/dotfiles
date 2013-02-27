@@ -140,7 +140,7 @@ endfunction
 command! -nargs=0 SudoWrite :call SudoWrite()
 "cnoremap w!! w !sudo tee % >/dev/null
 
-" Unfuck my screen:bwipe
+" Unfuck my screen
 nnoremap <leader>r :syntax sync fromstart<cr>:redraw!<cr>
 
 " Stop highlighting
