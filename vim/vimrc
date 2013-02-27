@@ -1,3 +1,8 @@
+" VIM configuration file by Vadim Fint <mocksoul@gmail.com>
+" vim: fdm=marker fdls=0
+
+" TODO: map <del> to blackhole register
+
 " VIM Addon Manager initialization {{{
 source ~/.vim/vam-setup
 " }}}
@@ -179,6 +184,10 @@ noremap <silent> <C-Down> <C-E>
 imap <silent> <C-Up> <C-O><C-Up>
 imap <silent> <C-Down> <C-O><C-Down>
 
+" Make vim to scroll by visible lines, not by physical (while wrapping)
+noremap j gj
+noremap k gk
+
 " PageUp/PageDown hack {{{
 function! GetNumberOfVisibleLines()
   let cur_line = line(".")
@@ -324,12 +333,35 @@ set langmap=ёйцукенгшщзхъфывапролджэячсмитьбюЁ
 " Language conf }}}
 
 " Copy/Paste {{{
-function! g:CopyTextPlease()
-    normal !gv
-    silent '<,'>w !xsel -i -b
-endfunction
-noremap p :set paste<cr>:r!xsel -o -b<cr>:set nopaste<cr>
-noremap y :<c-u>call g:CopyTextPlease()<cr>
+
+" yank from curpos to eol
+map Y y$
+
+" Clipboard tricks {{{
+" Basically we want:
+" 1. Selected in VIM == selected in any x11 app (goes to X11 selection buffer)
+" 2. Copied in VIM == copied in any x11 app (goes to X11 clipboard)
+" 3. Paste by default from x11 clipboard
+" 4. Paste from x11 selection by <leader>[p|P]
+set clipboard=
+if has('unnamedplus')
+    " if something selected -- put into X selection buffe
+    set clipboard+=autoselect
+
+    " if we can, use '+' register (X clipboard) by default
+    set clipboard+=unnamedplus
+elseif has('unnamed')
+    " if we can, use '*' register (X primary selection) by default 
+    set clipboard+=unnamed
+endif
+
+" Allow to paste from x11 selection
+noremap <leader>p "*p
+noremap <leader>P "*P
+" Clipboard tricks }}}
+
+set clipboard+=html
+set clipboard+=exclude:cons\\\\|linux
 " Copy/Paste }}}
 
 " Activate default set of plugins {{{
@@ -373,7 +405,7 @@ let g:pymode_run = 1
 let g:pymode_run_key = '<localleader>r'
 let g:pymode_lint = 0
 let g:pymode_lint_checker = "pyflakes,pep8,pylint"
-let g:pymode_rope = 0
+let g:pymode_rope = 1
 let g:pymode_folding = 1
 let g:pymode_motion = 0
 let g:pymode_indent = 1
@@ -407,7 +439,7 @@ let g:bufExplorerSortBy = "fullpath"
 let g:bufExplorerSplitOutPathName = 0
 let g:bufExplorerFindActive = 0
 noremap <F1> :BufExplorer<cr>
-inoremap <F1> <c-o><F1>
+imap <F1> <c-o><F1>
 " }}}
 " * tagbar {{{
 ActivateAddons tagbar
@@ -450,6 +482,13 @@ ActivateAddons mercurial-syntax
 " }}}
 " * local-vimrc {{{
 ActivateAddons local-vimrc
+" }}}
+" * nerd {{{
+ActivateAddons The_NERD_tree
+let g:NERDChristmasTree = 1
+let g:NERDTreeDirArrows = 0
+noremap <F2> :NERDTreeToggle<cr>
+imap <F2> <c-o><F2>
 " }}}
 " Activate default set of plugins }}}
 
@@ -495,29 +534,13 @@ if &term =~ '^screen'
     execute "set <PageUp>=\e[5;*~"
     execute "set <PageDown>=\e[6;*~"
 endif
-
-"set clipboard=autoselect 
-"if $DISPLAY !~ ':\d' 
-"    set clipboard+=exclude:* 
-"endif 
-
 " Fix tmux/xterm keys }}}
 
-let loaded_matchparen = 1
-
 " backspace conf
+" XXX: WTF is this?
 set whichwrap+=<,>,[,],h,l
 
-" Project
-let loaded_project = 1
-let g:proj_window_width = 30
-
-" SuperTab
-let g:SuperTabLongestEnhanced = 1
-let g:SuperTabLongestHighlight = 0
-let g:SuperTabDefaultCompletionType = "context"
-
-" VimWiki {{{
+" Missing addons {{{
 ""ActivateAddons SuperTab
 "ActivateAddons SuperTab_continued.
 "ActivateAddons snipmate-snippets
@@ -531,4 +554,4 @@ let g:SuperTabDefaultCompletionType = "context"
 "ActivateAddons Mercurial
 "ActivateAddons RST_Tables_works_with_non-english_langu
 "ActivateAddons deb
-"
+" }}}

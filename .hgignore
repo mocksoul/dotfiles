@@ -1,1 +1,6 @@
+^bak/
+^vim/vim/bak
+^vim/vim/vim-addons
+^vim/vim/off
+^vim/vim/addons/bak
 ^vim/vim/.netrwhist
