@@ -3,8 +3,12 @@
 
 " TODO: fix pastetoggle
 
+" Tune runtimepath {{{
+let &runtimepath = '~/.config/vim' . ',' . &runtimepath
+" }}}
+
 " VIM Addon Manager initialization {{{
-source ~/.vim/vam-setup
+source ~/.config/vim/vam-setup
 " }}}
 
 " Basic options {{{
