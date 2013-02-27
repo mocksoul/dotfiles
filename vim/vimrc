@@ -448,6 +448,9 @@ noremap <F9> :TagbarToggle<cr>
 " * mercurial-syntax
 ActivateAddons mercurial-syntax
 " }}}
+" * local-vimrc {{{
+ActivateAddons local-vimrc
+" }}}
 " Activate default set of plugins }}}
 
 " Tune specific file types {{{
