@@ -32,7 +32,7 @@ fun! SetupVAM()
   let g:vim_addon_manager = {}
   let g:vim_addon_manager.shell_commands_run_method = 'system'
   let g:vim_addon_manager.auto_install = 0
-  let g:vim_addon_manager.plugin_root_dir = expand('$HOME/.vim/addons')
+  let g:vim_addon_manager.plugin_root_dir = expand('$HOME/.config/vim/addons')
   let g:vim_addon_manager.known = 'vam-known-repos'
 
   "let g:vim_addon_manager.log_to_buf = 1
