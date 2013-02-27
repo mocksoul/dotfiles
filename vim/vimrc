@@ -1,3 +1,6 @@
+" VIM configuration file by Vadim Fint <mocksoul@gmail.com>
+" vim: fdm=marker fdls=0
+
 " VIM Addon Manager initialization {{{
 source ~/.vim/vam-setup
 " }}}
