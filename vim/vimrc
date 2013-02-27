@@ -129,8 +129,9 @@ let maplocalleader = "/"
 nnoremap <leader>s vip:!sort<cr>
 vnoremap <leader>s :!sort<cr>
 
-" Toggle line numbers
+" Toggle line numbers and switching to relative
 nnoremap <leader>n :setlocal number!<cr>
+nnoremap <leader>N :setlocal relativenumber<cr>
 
 " Easier sudo write
 function! SudoWrite()
