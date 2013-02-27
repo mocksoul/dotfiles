@@ -1,7 +1,6 @@
 " VIM configuration file by Vadim Fint <mocksoul@gmail.com>
 " vim: fdm=marker fdls=0
 
-" TODO: map <del> to blackhole register
 " TODO: fix pastetoggle
 
 " VIM Addon Manager initialization {{{
@@ -354,6 +353,9 @@ noremap <leader>P "*P
 
 set clipboard+=html
 set clipboard+=exclude:cons\\\\|linux
+
+" Delete key copies to blackhole register
+noremap <Del> "_d
 " Copy/Paste }}}
 
 " Activate default set of plugins {{{
