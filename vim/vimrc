@@ -407,7 +407,7 @@ let g:bufExplorerSortBy = "fullpath"
 let g:bufExplorerSplitOutPathName = 0
 let g:bufExplorerFindActive = 0
 noremap <F1> :BufExplorer<cr>
-inoremap <F1> <c-o><F1>
+imap <F1> <c-o><F1>
 " }}}
 " * tagbar {{{
 ActivateAddons tagbar
