@@ -2,6 +2,7 @@
 " vim: fdm=marker fdls=0
 
 " TODO: map <del> to blackhole register
+" TODO: fix pastetoggle
 
 " VIM Addon Manager initialization {{{
 source ~/.vim/vam-setup
@@ -46,7 +47,6 @@ set undoreload=10000             " save undo then reloading file (so we can undo
 set nobackup                     " dont want backups anymore
 set nowritebackup                " dont want backups anymore
 set noswapfile                   " swap file is not needed as well
-set pastetoggle=<F2>
 
 " Make and set undo, backup and swap directories {{{
 let s:mdirs = ['~/.cache/vim/undo', '~/.cache/vim/backup', '~/.cache/vim/swap']
