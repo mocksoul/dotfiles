@@ -76,8 +76,7 @@ augroup line_return
         \ endif
 augroup END
 
-" Undo in insert mode
-"imap <c-z> <c-o>u
+" Allow to suspend VIM in insert mode
 imap <c-z> <c-o><c-z>
 
 " NetRW settings
