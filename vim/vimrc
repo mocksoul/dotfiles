@@ -405,7 +405,7 @@ let g:pymode_run = 1
 let g:pymode_run_key = '<localleader>r'
 let g:pymode_lint = 0
 let g:pymode_lint_checker = "pyflakes,pep8,pylint"
-let g:pymode_rope = 0
+let g:pymode_rope = 1
 let g:pymode_folding = 1
 let g:pymode_motion = 0
 let g:pymode_indent = 1
@@ -483,6 +483,13 @@ ActivateAddons mercurial-syntax
 " * local-vimrc {{{
 ActivateAddons local-vimrc
 " }}}
+" * nerd {{{
+ActivateAddons The_NERD_tree
+let g:NERDChristmasTree = 1
+let g:NERDTreeDirArrows = 0
+noremap <F2> :NERDTreeToggle<cr>
+imap <F2> <c-o><F2>
+" }}}
 " Activate default set of plugins }}}
 
 " Tune specific file types {{{
@@ -527,7 +534,6 @@ if &term =~ '^screen'
     execute "set <PageUp>=\e[5;*~"
     execute "set <PageDown>=\e[6;*~"
 endif
-
 " Fix tmux/xterm keys }}}
 
 " backspace conf
