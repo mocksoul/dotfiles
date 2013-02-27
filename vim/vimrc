@@ -1,8 +1,6 @@
 " VIM configuration file by Vadim Fint <mocksoul@gmail.com>
 " vim: fdm=marker fdls=0
 
-" TODO: fix pastetoggle
-
 " Tune runtimepath {{{
 let &runtimepath = '~/.config/vim' . ',' . &runtimepath
 " }}}
@@ -35,6 +33,7 @@ set nostartofline                " try to preserve cursor pos during PgUp/PgDn
 set noswapfile                   " swap file is not needed as well
 set nowritebackup                " dont want backups anymore
 set number                       " show line numbers by default
+set pastetoggle=<F6>
 set ruler                        " always show
 set shiftround
 set showbreak=~
