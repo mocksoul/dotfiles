@@ -130,7 +130,7 @@ vnoremap <leader>s :!sort<cr>
 nnoremap <leader>n :setlocal number!<cr>
 
 " Easier sudo write
-function SudoWrite()
+function! SudoWrite()
     exec "w !sudo tee %>/dev/null"
 endfunction
 command! -nargs=0 SudoWrite :call SudoWrite()
@@ -180,7 +180,7 @@ imap <silent> <C-Up> <C-O><C-Up>
 imap <silent> <C-Down> <C-O><C-Down>
 
 " PageUp/PageDown hack {{{
-function GetNumberOfVisibleLines()
+function! GetNumberOfVisibleLines()
   let cur_line = line(".")
   let cur_col = virtcol(".")
   normal H
@@ -420,7 +420,7 @@ let g:tagbar_sort = 0 " order in file
 let g:tagbar_autoshowtag = 1
 let g:tagbar_iconchars = ['+', '-']
 
-function GoTagBar()
+function! GoTagBar()
     let g:tagbar_left = 1
     call tagbar#OpenWindow('fcj')
     let g:tagbar_left = 0
