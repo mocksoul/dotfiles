@@ -1,6 +1,8 @@
 " VIM configuration file by Vadim Fint <mocksoul@gmail.com>
 " vim: fdm=marker fdls=0
 
+" TODO: map <del> to blackhole register
+
 " VIM Addon Manager initialization {{{
 source ~/.vim/vam-setup
 " }}}
