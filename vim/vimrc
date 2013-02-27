@@ -31,7 +31,6 @@ set matchtime=3
 set showbreak=~
 set splitbelow
 set splitright
-"set fillchars=diff:⣿,vert:│
 set autowrite
 set autoread
 set shiftround
@@ -231,12 +230,14 @@ set cmdheight=1                  " commandbar height
 set showmatch
 set matchtime=5
 set cursorline
+set fillchars=vert:\|,fold:\ 
 syntax on
 color gentooish
 highlight LineNr term=None cterm=None ctermfg=DarkGray ctermbg=235 guibg=235
 highlight CursorLine term=None cterm=None ctermbg=235 guibg=235
 highlight ColorColumn term=None cterm=None  ctermbg=235 ctermfg=red guibg=LightRed
-
+highlight VertSplit cterm=NONE ctermbg=NONE ctermfg=gray
+highlight Folded ctermbg=233 ctermfg=142
 " Highlight VCS merge conflict markers
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
