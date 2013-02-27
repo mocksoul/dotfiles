@@ -337,12 +337,35 @@ set langmap=ёйцукенгшщзхъфывапролджэячсмитьбюЁ
 " Language conf }}}
 
 " Copy/Paste {{{
-function! g:CopyTextPlease()
-    normal !gv
-    silent '<,'>w !xsel -i -b
-endfunction
-noremap p :set paste<cr>:r!xsel -o -b<cr>:set nopaste<cr>
-noremap y :<c-u>call g:CopyTextPlease()<cr>
+
+" yank from curpos to eol
+map Y y$
+
+" Clipboard tricks {{{
+" Basically we want:
+" 1. Selected in VIM == selected in any x11 app (goes to X11 selection buffer)
+" 2. Copied in VIM == copied in any x11 app (goes to X11 clipboard)
+" 3. Paste by default from x11 clipboard
+" 4. Paste from x11 selection by <leader>[p|P]
+set clipboard=
+if has('unnamedplus')
+    " if something selected -- put into X selection buffe
+    set clipboard+=autoselect
+
+    " if we can, use '+' register (X clipboard) by default
+    set clipboard+=unnamedplus
+elseif has('unnamed')
+    " if we can, use '*' register (X primary selection) by default 
+    set clipboard+=unnamed
+endif
+
+" Allow to paste from x11 selection
+noremap <leader>p "*p
+noremap <leader>P "*P
+" Clipboard tricks }}}
+
+set clipboard+=html
+set clipboard+=exclude:cons\\\\|linux
 " Copy/Paste }}}
 
 " Activate default set of plugins {{{
@@ -508,11 +531,6 @@ if &term =~ '^screen'
     execute "set <PageUp>=\e[5;*~"
     execute "set <PageDown>=\e[6;*~"
 endif
-
-"set clipboard=autoselect 
-"if $DISPLAY !~ ':\d' 
-"    set clipboard+=exclude:* 
-"endif 
 
 " Fix tmux/xterm keys }}}
 
