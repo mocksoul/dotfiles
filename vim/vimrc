@@ -13,42 +13,42 @@ source ~/.config/vim/vam-setup
 
 " Basic options {{{
 filetype plugin indent on
-set nocompatible                 " git rid of awful vi-compat mode
-set encoding=utf-8
-set modelines=3
-set ruler                        " always show
-set ttyfast
-set visualbell
-set hidden                       " allow buffers to have changes and be hidden
-set showcmd
-set showmode
 set autoindent
+set autoread
+set autowrite
 set backspace=indent,eol,start
-set number                       " show line numbers by default
-set laststatus=2
+set encoding=utf-8
+set foldlevelstart=0
+set foldmethod=marker
+set hidden                       " allow buffers to have changes and be hidden
 set history=1000
+set laststatus=2
+set linebreak
 set list
 set listchars=tab:»\ ,trail:·,nbsp:.,extends:#,precedes:#
-set nolazyredraw                   " do not redraw while running macros (much faster)
 set matchtime=3
+set modelines=3
+set nobackup                     " dont want backups anymore
+set nocompatible                 " git rid of awful vi-compat mode
+set nolazyredraw                   " do not redraw while running macros (much faster)
+set nostartofline                " try to preserve cursor pos during PgUp/PgDn
+set noswapfile                   " swap file is not needed as well
+set nowritebackup                " dont want backups anymore
+set number                       " show line numbers by default
+set ruler                        " always show
+set shiftround
 set showbreak=~
+set showcmd
+set showmode
 set splitbelow
 set splitright
-set autowrite
-set autoread
-set shiftround
-set title
-set linebreak
-set nostartofline                " try to preserve cursor pos during PgUp/PgDn
 set timeoutlen=1000
+set title
 set ttimeoutlen=10
-set foldmethod=marker
-set foldlevelstart=0
+set ttyfast
 set undofile                     " persistent undo is better than backups!
 set undoreload=10000             " save undo then reloading file (so we can undo reload), only if <10000 chars
-set nobackup                     " dont want backups anymore
-set nowritebackup                " dont want backups anymore
-set noswapfile                   " swap file is not needed as well
+set visualbell
 
 " Make and set undo, backup and swap directories {{{
 let s:mdirs = ['~/.cache/vim/undo', '~/.cache/vim/backup', '~/.cache/vim/swap']
