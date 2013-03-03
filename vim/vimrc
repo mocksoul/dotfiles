@@ -512,7 +512,7 @@ augroup END
 " ReST {{{
 augroup ft_rest
     au!
-    au FileType rst set textwidth=78
+    au FileType rst set textwidth=78 tabstop=3 shiftwidth=3 softtabstop=3
 augroup END
 " ReST }}}
 " Tune specific file types }}}
