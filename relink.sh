@@ -3,7 +3,10 @@
 P=$(realpath ${0%/*})
 H=$HOME
 
+mkdir -p $H/.config/nvim
+mkdir -p $H/.local/share/nvim/{plugged,shada,swap,view}
+
 ln -sfn $P/vim/vimrc $H/.vimrc
-ln -sfn $P/vim/vim $H/.vim
-ln -sfn $P/powerline $H/.config/powerline
-ln -sfn $P/bin/peat $H/bin/peat
+ln -sfn $P/vim/vim $H/.config/vim
+ln -sfn $H/.vimrc $H/.config/nvim/init.vim
+ln -sfn $H/.local/share/nvim/view $H/.vim/view
