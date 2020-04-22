@@ -10,8 +10,7 @@ After symlinks relinked future updates cant be just pulled via git
 
 ## Apps
 
-- vim
-- neovim
+- vim / neovim
 - tmux
 - alacritty
 
