@@ -1,0 +1,8 @@
+#!/bin/bash
+
+export ALACRITTYQUAKE=1;
+
+cl=$(xdotool search --classname alacrittyquake) && {
+    ac=$(xdotool getactivewindow)
+    [ "$cl" = "$ac" ] && xdotool windowminimize $cl || xdotool windowactivate $cl
+} || alacritty --class AlacrittyQuake &
