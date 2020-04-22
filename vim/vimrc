@@ -1,22 +1,20 @@
 " VIM configuration file by Vadim Fint <mocksoul@gmail.com>
-" vim: fdm=marker fdls=0
+" vim: fdm=marker
+
 
 " Tune runtimepath {{{
 let &runtimepath = '~/.config/vim' . ',' . &runtimepath
 " }}}
 
-" VIM Addon Manager initialization {{{
-source ~/.config/vim/vam-setup
-" }}}
-
 " Basic options {{{
 filetype plugin indent on
+set nocompatible                 " git rid of awful vi-compat mode
 set autoindent
 set autoread
 set autowrite
 set backspace=indent,eol,start
 set encoding=utf-8
-set foldlevelstart=0
+set foldlevelstart=99
 set foldmethod=marker
 set hidden                       " allow buffers to have changes and be hidden
 set history=1000
@@ -25,9 +23,9 @@ set linebreak
 set list
 set listchars=tab:»\ ,trail:·,nbsp:.,extends:#,precedes:#
 set matchtime=3
+set modeline
 set modelines=3
 set nobackup                     " dont want backups anymore
-set nocompatible                 " git rid of awful vi-compat mode
 set nolazyredraw                   " do not redraw while running macros (much faster)
 set nostartofline                " try to preserve cursor pos during PgUp/PgDn
 set noswapfile                   " swap file is not needed as well
@@ -48,7 +46,7 @@ set ttyfast
 set undofile                     " persistent undo is better than backups!
 set undoreload=10000             " save undo then reloading file (so we can undo reload), only if <10000 chars
 set visualbell
-
+set viewoptions=cursor,folds
 " Make and set undo, backup and swap directories {{{
 let s:mdirs = ['~/.cache/vim/undo', '~/.cache/vim/backup', '~/.cache/vim/swap']
 for dir in s:mdirs
@@ -78,11 +76,18 @@ augroup line_return
         \ endif
 augroup END
 
+augroup filetypedetect
+    au BufNewFile,BufRead *.tjp,*.tji               setf tjp
+augroup END
+au! Syntax tjp          so ~/.vim/syntax/tjp.vim
+
 " Allow to suspend VIM in insert mode
 imap <c-z> <c-o><c-z>
 
 " NetRW settings
 let g:netrw_list_hide = '\.py[co]$'
+
+let g:python3_host_prog = '/usr/bin/python3'
 " Basic options }}}
 
 " Wildmenu completion {{{
@@ -125,7 +130,7 @@ set virtualedit=block,onemore       " allow to past EOL in Visual block mode
 
 " Leader keys and other mappings {{{
 let mapleader = "\\"
-let maplocalleader = "/"
+let maplocalleader = "`"
 
 " Sort lines
 nnoremap <leader>s vip:!sort<cr>
@@ -179,47 +184,70 @@ imap <A-Right> <C-o><A-Right>
 imap <A-Down> <C-o><A-Down>
 imap <A-Up> <C-o><A-Up>
 
-" Scroll up/down by 1 line using Ctrl-Up/Down
-noremap <silent> <C-Up> <C-Y>
-noremap <silent> <C-Down> <C-E>
-imap <silent> <C-Up> <C-O><C-Up>
-imap <silent> <C-Down> <C-O><C-Down>
+" Scroll up/down by 4 line using Ctrl-Up/Down (Ctrl-Shift-Up/Down)
+noremap <silent> <C-S-A-Up> <C-y>
+noremap <silent> <C-S-Up> 5<C-y>
+map <silent> <C-Up> <C-S-Up>5<Up>
+inoremap <silent> <C-S-Up> <C-o>5<C-y>
+imap <silent> <C-Up> <C-S-Up><C-o>5<Up>
+
+noremap <silent> <C-S-A-Down> <C-e>
+noremap <silent> <C-S-Down> 5<C-e>
+map <silent> <C-Down> <C-S-Down>5<Down>
+inoremap <silent> <C-S-Down> <C-o>5<C-e>
+imap <silent> <C-Down> <C-S-Down><C-o>5<Down>
+
+"noremap <Backspace> <Ins><Backspace>
+"noremap <Enter> <Ins><Enter>  # enter in e.g. syntastic errors list will fail here
+"noremap <Space> <Ins><Space>
+
+noremap <Backspace> <Nop>
+noremap <Enter> <Nop>
+noremap <Space> <Nop>
+au FileType qf noremap <buffer> <Enter> <Enter>
 
 " Make vim to scroll by visible lines, not by physical (while wrapping)
 noremap j gj
 noremap k gk
 
+nnoremap <C-b> :make<CR>
+"nnoremap <C-u> :make upload<CR>
+
 " PageUp/PageDown hack {{{
-function! GetNumberOfVisibleLines()
-  let cur_line = line(".")
-  let cur_col = virtcol(".")
-  normal H
-  let top_line = line(".")
-  normal L
-  let bot_line = line(".")
-  execute "normal " . cur_line . "G"
-  execute "normal " . cur_col . "|"
-  return bot_line - top_line
-endfunc
-
-" noremap <PageUp> 39<C-U>:set scroll=0<CR>
-function! MyPageUp()
-  let visible_lines = GetNumberOfVisibleLines()
-  execute "normal " . visible_lines . "\<C-U>\r"
-  set scroll=0
-endfunction
-
-" noremap <PageDown> 39<C-D>:set scroll=0<CR>
-function! MyPageDown()
-  let visible_lines = GetNumberOfVisibleLines()
-  execute "normal " . visible_lines . "\<C-D>\r"
-  set scroll=0
-endfunction
-
-noremap <silent> <PageUp> :call MyPageUp()<CR>
-noremap <silent> <PageDown> :call MyPageDown()<CR>
-imap <silent> <PageUp> <C-O><PageUp>
-imap <silent> <PageDown> <C-O><PageDown>
+"function! GetNumberOfVisibleLines()
+"  let cur_line = line(".")
+"  let cur_col = virtcol(".")
+"  normal H
+"  let top_line = line(".")
+"  normal L
+"  let bot_line = line(".")
+"  execute "normal " . cur_line . "G"
+"  execute "normal " . cur_col . "|"
+"  return bot_line - top_line
+"endfunc
+"
+"" noremap <PageUp> 39<C-U>:set scroll=0<CR>
+"function! MyPageUp()
+"  let visible_lines = GetNumberOfVisibleLines()
+"  execute "normal " . visible_lines . "\<C-U>\r"
+"  set scroll=0
+"endfunction
+"
+"" noremap <PageDown> 39<C-D>:set scroll=0<CR>
+"function! MyPageDown()
+"  let visible_lines = GetNumberOfVisibleLines()
+"  execute "normal " . visible_lines . "\<C-D>\r"
+"  set scroll=0
+"endfunction
+"
+"noremap <silent> <PageUp> :call MyPageUp()<CR>
+"noremap <silent> <PageDown> :call MyPageDown()<CR>
+"imap <silent> <PageUp> <C-O><PageUp>
+"imap <silent> <PageDown> <C-O><PageDown>
+noremap <PageUp> <C-u>
+noremap <PageDown> <C-d>
+imap <PageUp> <c-o><PageUp>
+imap <PageDown> <c-o><PageDown>
 " }}}
 " Leader keys and other mappings }}}
 
@@ -235,11 +263,20 @@ set cursorline
 set fillchars=vert:\|,fold:\ 
 syntax on
 color gentooish
-highlight LineNr term=None cterm=None ctermfg=DarkGray ctermbg=235 guibg=235
-highlight CursorLine term=None cterm=None ctermbg=235 guibg=235
-highlight ColorColumn term=None cterm=None  ctermbg=235 ctermfg=red guibg=LightRed
+highlight Normal ctermfg=249 ctermbg=none
+highlight LineNr term=None cterm=None ctermfg=DarkGray ctermbg=234 guibg=Gray
+highlight CursorLine term=None cterm=None ctermbg=232 guibg=Gray
+highlight CursorLineNr term=none cterm=none ctermfg=250 ctermbg=234
+highlight ColorColumn term=None cterm=none ctermbg=232 ctermfg=none guibg=LightRed
 highlight VertSplit cterm=NONE ctermbg=NONE ctermfg=gray
-highlight Folded ctermbg=233 ctermfg=142
+highlight Folded ctermbg=none ctermfg=142
+
+if has('nvimx')
+    highlight ActiveWindow ctermbg=none
+    highlight InactiveWindow ctermbg=232
+    set winhighlight=Normal:ActiveWindow,NormalNC:InactiveWindow
+endif
+
 " Highlight VCS merge conflict markers
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
@@ -248,8 +285,17 @@ augroup cline
     au!
     au WinLeave * set nocursorline
     au WinEnter * set cursorline
+    "au WinLeave * set colorcolumn=0
+    "au WinEnter * set colorcolumn=+1
+    "au WinLeave * hi Normal ctermbg=233
+    "au WinEnter * hi Normal ctermbg=234
 augroup END
 
+augroup fastescape
+    au!
+    au InsertEnter * set timeoutlen=0
+    au InsertLeave * set timeoutlen=1000
+augroup END
 
 "" Statusline {{{
 "hi User1 ctermbg=238 ctermfg=250
@@ -319,11 +365,11 @@ set incsearch
 set keymap=russian-jcukenwin
 set iminsert=0
 set imsearch=0
-set imcmdline=0
+"set imcmdline=0  # not supported in vim >= 8.1 ?
 map <F11> i<C-^><Esc>
 imap <F11> <C-^>
 
-set langmap=ёйцукенгшщзхъфывапролджэячсмитьбюЁЙЦУКЕHГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ;~qwertyuiop[]asdfghjkl\\;'zxcvbnm\\,.~QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>
+set langmap=ёйцукенгшщзхъфывапролджэячсмитьбю;`qwertyuiop[]asdfghjkl;'zxcvbnm\\,\.
 " Language conf }}}
 
 " Copy/Paste {{{
@@ -340,7 +386,9 @@ map Y y$
 set clipboard=
 if has('unnamedplus')
     " if something selected -- put into X selection buffe
-    set clipboard+=autoselect
+    if ! has('nvim')
+        set clipboard+=autoselect
+    endif
 
     " if we can, use '+' register (X clipboard) by default
     set clipboard+=unnamedplus
@@ -354,28 +402,23 @@ noremap <leader>p "*p
 noremap <leader>P "*P
 " Clipboard tricks }}}
 
-set clipboard+=html
-set clipboard+=exclude:cons\\\\|linux
+if ! has('nvim')
+    set clipboard+=html
+    set clipboard+=exclude:cons\\\\|linux
+endif
 
 " Delete key copies to blackhole register
 noremap <Del> "_d
 " Copy/Paste }}}
 
-" Activate default set of plugins {{{
-" * powerline {{{
-ActivateAddons powerline
-set noshowmode  " dont needed since powerline has more stuning mode display
-augroup FastEscape
-    au!
-    au InsertEnter * set timeoutlen=0
-    au InsertLeave * set timeoutlen=1000
-augroup END
-" }}}
+" Plug installation {{{
+call plug#begin('~/.local/share/nvim/plugged')
+
 " * vimwiki {{{
-ActivateAddons vimwiki
+Plug 'vimwiki/vimwiki'
 nmap <Leader>wtl <Plug>VimwikiTableMoveColumnLeft
 nmap <Leader>wtr <Plug>VimwikiTableMoveColumnRight
-let g:vimwiki_folding = 1
+let g:vimwiki_folding = 'expr'
 let g:vimwiki_fold_lists = 1
 let g:vimwiki_hl_headers = 0
 let g:vimwiki_hl_cb_checked = 1
@@ -383,44 +426,18 @@ let g:vimwiki_auto_checkbox = 1
 let g:vimwiki_table_mappings = 0
 let g:vimwiki_table_auto_fmt = 0
 " }}}
-" * clam {{{
-ActivateAddons clam
-nnoremap ! :Clam<space>
-vnoremap ! :ClamVisual<space>
-let g:clam_autoreturn = 1
-let g:clam_debug = 0
+" * taskwiki {{{
+Plug 'tbabej/taskwiki'
+Plug 'powerman/vim-plugin-AnsiEsc'
+Plug 'blindFS/vim-taskwarrior'
+let g:taskwiki_maplocalleader="t"
+let g:taskwiki_disable_concealcursor="yes"
+let g:taskwiki_source_tw_colors=""
+let g:taskwiki_dont_preserve_folds="yes"
 " }}}
-" * gundo {{{
-ActivateAddons gundo
-nnoremap <F5> :GundoToggle<cr>
-" }}}
-" * pymode {{{
-ActivateAddons pymode
-let g:pymode_doc = 1
-let g:pymode_doc_key = 'M'
-let g:pymode_run = 1
-let g:pymode_run_key = '<localleader>r'
-let g:pymode_lint = 0
-let g:pymode_lint_checker = "pyflakes,pep8,pylint"
-let g:pymode_rope = 1
-let g:pymode_folding = 1
-let g:pymode_motion = 0
-let g:pymode_indent = 1
-let g:pymode_syntax = 1
-let g:pymode_syntax_all = 1
-let g:pymode_syntax_slow_sync = 0
-" }}}
-" * syntastic {{{
-ActivateAddons syntastic
-let g:syntastic_check_on_open = 1
-let g:syntastic_auto_loc_list = 2  " close auto, open manually
-let g:syntastic_enable_ballons = 0
-let g:syntastic_loc_list_height = 10
-let g:syntastic_echo_current_error = 1
-let g:syntastic_python_checker_prog = 'flake8'
-" }}}
-" * session {{{
-ActivateAddons session
+" * vim-session {{{
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-session'
 set sessionoptions-=help
 set sessionoptions-=blank
 set sessionoptions-=options
@@ -429,8 +446,26 @@ let g:session_persist_globals = []
 let g:session_autoload = 0
 " call add(g:session_persist_globals, 'g:syntastic_python_checker_prog')
 " }}}
+" * vim-diminactive {{{
+Plug 'blueyed/vim-diminactive'
+let g:diminactive_use_colorcolumn = 1
+let g:diminactive_use_syntax = 0
+let g:diminactive_enable_focus = 1
+" }}}
+" * vim-airline {{{
+Plug 'vim-airline/vim-airline'
+set noshowmode  " not needed anymore
+let g:airline_powerline_fonts = 0
+let g:airline_symbols_ascii = 1
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+let g:airline#extensions#keymap#enabled = 0
+let g:airline_detect_spell = 0
+let g:airline_detect_spelllang = 0
+"let g:airline_section_a = '(mode)'
+"let g:airline_section_a = '%#__accent_bold#%{airline#util#wrap(airline#parts#mode(),0)}%#__restore__#%{airline#util#append(airline#parts#crypt(),0)}%{airline#util#append(airline#parts#paste(),0)}%{airline#util#append("",0)}%{airline#util#append(airline#parts#spell(),0)}%{airline#util#append("",0)}%{airline#util#append(airline#extensions#xkblayout#status(),0)}%{airline#util#append(airline#parts#iminsert(),0)}'
+" }}}
 " * bufexplorer {{{
-ActivateAddons bufexplorer
+Plug 'jlanzarotta/bufexplorer'
 let g:bufExplorerShowRelativePath = 1
 let g:bufExplorerSortBy = "fullpath"
 let g:bufExplorerSplitOutPathName = 0
@@ -438,30 +473,140 @@ let g:bufExplorerFindActive = 0
 noremap <F1> :BufExplorer<cr>
 imap <F1> <c-o><F1>
 " }}}
-" * tagbar {{{
-ActivateAddons tagbar
+" * syntastic {{{
+Plug 'vim-syntastic/syntastic'
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_aggregate_errors = 1  " aggregate errors from all checkers
+let g:syntastic_enable_signs = 1
+let g:syntastic_auto_loc_list = 2     " close auto, open manually
+let g:syntastic_loc_list_height = 10
+let g:syntastic_enable_ballons = 0
+"let g:syntastic_full_redraws = 0
+let g:syntastic_python_checkers = ['flake8', 'python']  " off: py3kwarn pylama pep257 pep8
+let g:syntastic_python_python_exec = 'python3'
+let g:syntastic_python_flake8_exec = 'flake8'
+highlight Error term=reverse ctermfg=White ctermbg=124 guifg=White guibg=Red
+highlight SpellBad term=reverse cterm=bold ctermfg=White ctermbg=88 gui=undercurl guisp=Red
+highlight SpellCap term=reverse cterm=undercurl ctermfg=White ctermbg=88 gui=undercurl guisp=Red
+" }}}
+" * vim-addon-local-vimrc {{{
+Plug 'MarcWeber/vim-addon-local-vimrc'
+" }}}
+" * gundo {{{
+Plug 'sjl/gundo.vim'
+let g:gundo_prefer_python3 = 1
+nnoremap <F5> :GundoToggle<CR>
+" }}}
+" * NERD Tree {{{
+Plug 'preservim/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+let g:NERDChristmasTree = 1
+let g:NERDTreeDirArrows = 0
+let g:NERDTreeShowIgnoredStatus = 1 " can have huge performance cost
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "mod",
+    \ "Staged"    : "stg",
+    \ "Untracked" : "unt",
+    \ "Renamed"   : "rnm",
+    \ "Unmerged"  : "unm",
+    \ "Deleted"   : "del",
+    \ "Dirty"     : "unt",
+    \ "Clean"     : "cln",
+    \ 'Ignored'   : 'ign',
+    \ "Unknown"   : "unk"
+    \ }
+let g:NERDTreeDirArrowExpandable = '+'
+let g:NERDTreeDirArrowCollapsible = '-'
+noremap <F2> :NERDTreeToggle<cr>
+imap <F2> <c-o><F2>
+" }}}
+" * TagBar {{{
+Plug 'majutsushi/tagbar'
 "let g:tagbar_ctags_bin = "/opt/local/bin/ctags"
 let g:tagbar_autoopen = 0
 let g:tagbar_autofocus = 1
 let g:tagbar_compact = 0
 let g:tagbar_width = 30
 let g:tagbar_sort = 0 " order in file
-let g:tagbar_autoshowtag = 1
+let g:tagbar_autoshowtag = 0
 let g:tagbar_iconchars = ['+', '-']
+let g:tagbar_left = 0
 
-function! GoTagBar()
-    let g:tagbar_left = 1
-    call tagbar#OpenWindow('fcj')
-    let g:tagbar_left = 0
-endfunction
+"function! GoTagBar()
+"    let g:tagbar_left = 1
+"    "call tagbar#OpenWindow('fcj')
+"    TagbarOpen -fj
+"    let g:tagbar_left = 0
+"endfunction
 
-noremap <F8> :call GoTagBar()<cr>
-noremap <F9> :TagbarToggle<cr>
+map <F9> :TagbarOpen -fj<cr>
+map <S-F9> :TagbarClose<cr>
+imap <F9> <C-o><F9><Esc>
+imap <S-F9> <C-o><S-F9>
+" }}}
+" * terminus {{{
+Plug 'wincent/terminus'
+" }}}
 
-"map <F8> :TagbarOpen fjh<CR>
-"imap <F8> <C-o><F8>
-"map <S-F8> :TagbarClose<CR>
-"imap <S-F8> <C-o><S-F8>
+call plug#end() " }}}
+
+" Activate default set of plugins using VAM {{{
+"source ~/.config/vim/vam-setup  " old-school
+" o pymode {{{
+"ActivateAddons pymode
+let g:pymode_options = 0
+let g:pymode_doc = 1
+let g:pymode_doc_key = 'M'
+let g:pymode_run = 1
+let g:pymode_run_key = '<localleader>r'
+let g:pymode_lint = 0
+let g:pymode_lint_checker = "pyflakes,pep8,pylint"
+let g:pymode_rope = 0
+let g:pymode_folding = 0
+let g:pymode_motion = 0
+let g:pymode_indent = 1
+let g:pymode_syntax = 1
+let g:pymode_syntax_all = 1
+let g:pymode_syntax_slow_sync = 0
+
+" %-formatting inside strings
+hi pythonStrFormatting ctermfg=212
+
+" }}}
+" o mercurial-syntax {{{
+"ActivateAddons mercurial-syntax
+"DasIch/vim-mercurial.git
+" }}}
+" o sql {{{
+"ActivateAddons sql
+"vim-scripts/sql
+" }}}
+" o vimade {{{
+"if ! has('nvim')
+""ActivateAddons vimade
+"let g:vimade = {}
+""let g:vimade.basebg = 234
+"let g:vimade.fadelevel = 0.4
+"let g:vimade.detecttermcolors = 1
+"let g:vimade.checkinterval = 1000
+"let g:vimade.enablefocusfading = 1
+"endif
+" }}}
+" o vim-tmux-focus-events {{{
+"ActivateAddons vim-tmux-focus-events
+" }}}
+" o vim-orgmode {{{
+"ActivateAddons vim-orgmode
+" }}}
+" o gutterline {{{
+"ActivateAddons gutterline
+" }}}
+" o xkbswitch {{{
+"ActivateAddons xkbswitch
+let g:XkbSwitchEnabled = 0
+"let g:XkbSwitchLib = '/home/mocksoul/.local/lib/libxkbswitch.so'
+"let g:XkbSwitchLib = '/home/mocksoul/workspace/xkb-switch/xkb-switch/build/libxkbswitch.so'
 " }}}
 " o taglist {{{
 "ActivateAddons taglist-plus
@@ -474,18 +619,20 @@ noremap <F9> :TagbarToggle<cr>
 "let Tlist_GainFocus_On_ToggleOpen = 1
 "let Tlist_File_Fold_Auto_Close = 1
 " }}}
-" * mercurial-syntax {{{
-ActivateAddons mercurial-syntax
+" o indentLIne {{{
+"ActivateAddons indentLine
+let g:indentLine_char = '|'
+let g:indentLine_color_term = 236
+let g:indentLine_faster = 1
+"let g:indentLine_concealcursor = 'vc'
+"let g:indentLine_conceallevel = 0
 " }}}
-" * local-vimrc {{{
-ActivateAddons local-vimrc
-" }}}
-" * nerd {{{
-ActivateAddons The_NERD_tree
-let g:NERDChristmasTree = 1
-let g:NERDTreeDirArrows = 0
-noremap <F2> :NERDTreeToggle<cr>
-imap <F2> <c-o><F2>
+" o clam {{{
+"ActivateAddons clam
+"nnoremap ! :Clam<space>
+"vnoremap ! :ClamVisual<space>
+"let g:clam_autoreturn = 1
+"let g:clam_debug = 0
 " }}}
 " Activate default set of plugins }}}
 
@@ -498,7 +645,10 @@ augroup ft_python
         \ if exists("python_space_error_highlight") |
         \     unlet python_space_error_highlight |
         \ endif
+        set nosi
 augroup END
+
+
 "let python_highlight_all = 1
 ""au FileType python syn keyword pythonDecorator True None False self
 "au BufEnter,BufRead *.py setlocal nosmartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
@@ -509,12 +659,65 @@ augroup END
 "au BufWritePre *.py :%s/\s\+$//e
 " Python }}}
 
+" VimWiki {{{
+augroup ft_vimwiki
+    au!
+    au FileType vimwiki set shiftwidth=2 tabstop=2 softtabstop=2
+" }}}
+
 " ReST {{{
 augroup ft_rest
     au!
     au FileType rst set textwidth=78 tabstop=3 shiftwidth=3 softtabstop=3
 augroup END
 " ReST }}}
+
+" Go {{{
+augroup ft_go
+    au!
+    au FileType go set tabstop=4 shiftwidth=4 noexpandtab
+augroup END
+" Go }}}
+
+" All {{
+"au BufWinLeave * mkview
+"au BufWinEnter * silent loadview
+
+let g:skipview_files = [
+            \ '[BufExplorer]',
+            \ 'NERD_tree_1'
+            \ ]
+
+function! MakeViewCheck()
+    if has('quickfix') && &buftype =~ 'nofile'
+        " Buffer is marked as not a file
+        return 0
+    endif
+    if empty(glob(expand('%:p')))
+        " File does not exist on disk
+        return 0
+    endif
+    if len($TEMP) && expand('%:p:h') == $TEMP
+        " We're in a temp dir
+        return 0
+    endif
+    if len($TMP) && expand('%:p:h') == $TMP
+        " Also in temp dir
+        return 0
+    endif
+    if index(g:skipview_files, expand('%')) >= 0
+        " File is in skip list
+        return 0
+    endif
+    return 1
+endfunction
+augroup vimrcAutoView
+    autocmd!
+    " Autosave & Load Views.
+    autocmd BufWritePost,BufLeave,WinLeave ?* if MakeViewCheck() | mkview | endif
+    autocmd BufWinEnter ?* if MakeViewCheck() | silent! loadview | endif
+augroup end
+
 " Tune specific file types }}}
 
 " Fix tmux/xterm keys {{{
@@ -530,7 +733,7 @@ endif
 " Fix tmux/xterm keys }}}
 
 " backspace conf
-" XXX: WTF is this?
+" XXX: WTF is this
 set whichwrap+=<,>,[,],h,l
 
 " Missing addons {{{
