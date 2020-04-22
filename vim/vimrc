@@ -1,7 +1,6 @@
 " VIM configuration file by Vadim Fint <mocksoul@gmail.com>
 " vim: fdm=marker
 
-
 " Tune runtimepath {{{
 let &runtimepath = '~/.config/vim' . ',' . &runtimepath
 " }}}
@@ -197,10 +196,6 @@ map <silent> <C-Down> <C-S-Down>5<Down>
 inoremap <silent> <C-S-Down> <C-o>5<C-e>
 imap <silent> <C-Down> <C-S-Down><C-o>5<Down>
 
-"noremap <Backspace> <Ins><Backspace>
-"noremap <Enter> <Ins><Enter>  # enter in e.g. syntastic errors list will fail here
-"noremap <Space> <Ins><Space>
-
 noremap <Backspace> <Nop>
 noremap <Enter> <Nop>
 noremap <Space> <Nop>
@@ -210,45 +205,11 @@ au FileType qf noremap <buffer> <Enter> <Enter>
 noremap j gj
 noremap k gk
 
-nnoremap <C-b> :make<CR>
-"nnoremap <C-u> :make upload<CR>
-
-" PageUp/PageDown hack {{{
-"function! GetNumberOfVisibleLines()
-"  let cur_line = line(".")
-"  let cur_col = virtcol(".")
-"  normal H
-"  let top_line = line(".")
-"  normal L
-"  let bot_line = line(".")
-"  execute "normal " . cur_line . "G"
-"  execute "normal " . cur_col . "|"
-"  return bot_line - top_line
-"endfunc
-"
-"" noremap <PageUp> 39<C-U>:set scroll=0<CR>
-"function! MyPageUp()
-"  let visible_lines = GetNumberOfVisibleLines()
-"  execute "normal " . visible_lines . "\<C-U>\r"
-"  set scroll=0
-"endfunction
-"
-"" noremap <PageDown> 39<C-D>:set scroll=0<CR>
-"function! MyPageDown()
-"  let visible_lines = GetNumberOfVisibleLines()
-"  execute "normal " . visible_lines . "\<C-D>\r"
-"  set scroll=0
-"endfunction
-"
-"noremap <silent> <PageUp> :call MyPageUp()<CR>
-"noremap <silent> <PageDown> :call MyPageDown()<CR>
-"imap <silent> <PageUp> <C-O><PageUp>
-"imap <silent> <PageDown> <C-O><PageDown>
+" Page up/dn half of page instead of full
 noremap <PageUp> <C-u>
 noremap <PageDown> <C-d>
 imap <PageUp> <c-o><PageUp>
 imap <PageDown> <c-o><PageDown>
-" }}}
 " Leader keys and other mappings }}}
 
 " Color scheme and appearence{{{
@@ -285,10 +246,6 @@ augroup cline
     au!
     au WinLeave * set nocursorline
     au WinEnter * set cursorline
-    "au WinLeave * set colorcolumn=0
-    "au WinEnter * set colorcolumn=+1
-    "au WinLeave * hi Normal ctermbg=233
-    "au WinEnter * hi Normal ctermbg=234
 augroup END
 
 augroup fastescape
@@ -296,62 +253,6 @@ augroup fastescape
     au InsertEnter * set timeoutlen=0
     au InsertLeave * set timeoutlen=1000
 augroup END
-
-"" Statusline {{{
-"hi User1 ctermbg=238 ctermfg=250
-"hi User2 ctermbg=234 ctermfg=246
-"hi User3 ctermfg=196 ctermbg=236
-"
-"hi User1 ctermbg=235 ctermfg=240
-"hi User2 ctermbg=237 ctermfg=250
-"hi User3 ctermbg=235 ctermfg=brown
-"hi User4 ctermbg=237 ctermfg=yellow
-"hi User5 ctermbg=235 ctermfg=darkgreen
-"hi User6 ctermbg=237 ctermfg=green
-"hi User9 ctermbg=237 ctermfg=red
-"
-"function! s:UpdateStatusLine(act, ins)
-"    let l:sl = ''
-"    let l:c = '%*'
-"
-"    if !a:act
-"        let l:c1 = '%1*'
-"        let l:c2 = '%3*'
-"        let l:c3 = '%5*'
-"    else
-"        let l:c1 = '%2*'
-"        let l:c2 = '%4*'
-"        let l:c3 = '%6*'
-"    endif
-"
-"    if a:ins && a:act
-"        let l:sl .= l:c1 . ' %9*INS' . l:c1 . ' ' . l:c
-"    else
-"        let l:sl .= l:c1 . '     ' . l:c
-"    endif
-"
-"    " Generic cursor info
-"    let l:sl .= l:c1 . '[%04l:%04v %p%% L=%L M=' . &l:filetype . ']' . l:c
-"
-"    " File name
-"    let l:sl .= l:c2 . ' %f' . l:c
-"
-"    " Modified ([+]) and other flags
-"    let l:sl .= l:c3 . ' %m%r%w'
-"
-"    let &l:statusline = l:sl
-"endfunction
-"
-"augroup cline
-"    au!
-"    au WinLeave * call s:UpdateStatusLine(0, 0)
-"    au WinEnter * call s:UpdateStatusLine(1, 0)
-"    au InsertEnter * call s:UpdateStatusLine(1, 1)
-"    au InsertLeave * call s:UpdateStatusLine(1, 0)
-"augroup END
-"
-"call s:UpdateStatusLine(1, 0)
-"" Statusline }}}
 " Color scheme }}}
 
 " Searching {{{
@@ -366,8 +267,8 @@ set keymap=russian-jcukenwin
 set iminsert=0
 set imsearch=0
 "set imcmdline=0  # not supported in vim >= 8.1 ?
-map <F11> i<C-^><Esc>
-imap <F11> <C-^>
+map <C-S-F11> i<C-^><Esc>
+imap <C-S-F11> <C-^>
 
 set langmap=ёйцукенгшщзхъфывапролджэячсмитьбю;`qwertyuiop[]asdfghjkl;'zxcvbnm\\,\.
 " Language conf }}}
@@ -425,6 +326,7 @@ let g:vimwiki_hl_cb_checked = 1
 let g:vimwiki_auto_checkbox = 1
 let g:vimwiki_table_mappings = 0
 let g:vimwiki_table_auto_fmt = 0
+au FileType vimwiki set shiftwidth=2 tabstop=2 softtabstop=2
 " }}}
 " * taskwiki {{{
 Plug 'tbabej/taskwiki'
@@ -533,13 +435,6 @@ let g:tagbar_autoshowtag = 0
 let g:tagbar_iconchars = ['+', '-']
 let g:tagbar_left = 0
 
-"function! GoTagBar()
-"    let g:tagbar_left = 1
-"    "call tagbar#OpenWindow('fcj')
-"    TagbarOpen -fj
-"    let g:tagbar_left = 0
-"endfunction
-
 map <F9> :TagbarOpen -fj<cr>
 map <S-F9> :TagbarClose<cr>
 imap <F9> <C-o><F9><Esc>
@@ -552,34 +447,6 @@ Plug 'wincent/terminus'
 call plug#end() " }}}
 
 " Tune specific file types {{{
-" Python {{{
-augroup ft_python
-    au!
-    au FileType iabbrev <buffer> afo assert False, "Okay"
-    au FileType python
-        \ if exists("python_space_error_highlight") |
-        \     unlet python_space_error_highlight |
-        \ endif
-        set nosi
-augroup END
-
-
-"let python_highlight_all = 1
-""au FileType python syn keyword pythonDecorator True None False self
-"au BufEnter,BufRead *.py setlocal nosmartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
-"au BufEnter,BufRead *.rst setlocal tabstop=3 shiftwidth=3 softtabstop=3 textwidth=80
-"au BufRead *.py highlight BadWhitespace ctermbg=red guibg=red
-"au BufRead *.py match BadWhitespace /^\t\+/
-"au BufRead *.py match BadWhitespace /\s\+$/
-"au BufWritePre *.py :%s/\s\+$//e
-" Python }}}
-
-" VimWiki {{{
-augroup ft_vimwiki
-    au!
-    au FileType vimwiki set shiftwidth=2 tabstop=2 softtabstop=2
-" }}}
-
 " ReST {{{
 augroup ft_rest
     au!
@@ -595,9 +462,6 @@ augroup END
 " Go }}}
 
 " All {{
-"au BufWinLeave * mkview
-"au BufWinEnter * silent loadview
-
 let g:skipview_files = [
             \ '[BufExplorer]',
             \ 'NERD_tree_1'
@@ -650,19 +514,3 @@ endif
 " backspace conf
 " XXX: WTF is this
 set whichwrap+=<,>,[,],h,l
-
-" Missing addons {{{
-""ActivateAddons SuperTab
-"ActivateAddons SuperTab_continued.
-"ActivateAddons snipmate-snippets
-"ActivateAddons vim-ft-rst_header
-"ActivateAddons Shell
-"ActivateAddons surround
-"ActivateAddons repeat
-"ActivateAddons pythoncomplete
-"ActivateAddons python%790
-"ActivateAddons vim-addon-local-vimrc
-"ActivateAddons Mercurial
-"ActivateAddons RST_Tables_works_with_non-english_langu
-"ActivateAddons deb
-" }}}
