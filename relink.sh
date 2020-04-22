@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash -x
 
 P=$(realpath ${0%/*})
 H=$HOME
