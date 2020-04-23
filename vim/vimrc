@@ -346,6 +346,7 @@ set sessionoptions-=options
 let g:session_directory = '~/.cache/vim/sessions'
 let g:session_persist_globals = []
 let g:session_autoload = 0
+let g:session_autosave = 0
 " call add(g:session_persist_globals, 'g:syntastic_python_checker_prog')
 " }}}
 " * vim-diminactive {{{
