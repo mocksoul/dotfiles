@@ -444,6 +444,9 @@ imap <S-F9> <C-o><S-F9>
 " * terminus {{{
 Plug 'wincent/terminus'
 " }}}
+" * wakatime {{{
+Plug 'wakatime/vim-wakatime'
+" }}}
 
 call plug#end() " }}}
 
