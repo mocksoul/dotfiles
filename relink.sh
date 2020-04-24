@@ -9,8 +9,8 @@ mkdir -p $H/.local/share/zsh
 ln -sfn $P/zsh $H/.config/zsh
 ln -sfn $H/.config/zsh/zshrc $H/.zshrc
 
-ln -sfn $P/vim/vimrc $H/.vimrc
-ln -sfn $P/vim/vim $H/.config/vim
+ln -sfn $H/.config/vim/vimrc $H/.vimrc
+ln -sfn $P/vim $H/.config/vim
 
 ln -sfn $H/.local/share/nvim/view $H/.vim/view
 

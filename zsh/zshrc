@@ -140,4 +140,13 @@ alias sshome='ssh home'
 alias vim='nvim -u ~/.vimrc'
 alias vi='vim'
 
+function git() {
+    if [ "$1" = "merge" ] && [[ "$@" != *"--help" ]] ; then
+        shift 1;
+        command git mockmerge "$@"
+    else
+        command git "$@"
+    fi
+}
+
 alias g='git'
