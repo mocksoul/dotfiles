@@ -1,0 +1,13 @@
+[core]
+pager = bat -p -l gitlog
+
+[alias]
+d = diff HEAD
+l = log --oneline -n 20
+ll = log --oneline -n 100
+lg = log --oneline -n 20 --graph
+L = log -n 50
+LL = log -n 50 --stat
+
+[branch "trunk"]
+allowCommit = false

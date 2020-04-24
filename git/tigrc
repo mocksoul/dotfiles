@@ -1,0 +1,21 @@
+# default, topo, 
+set commit-order = default
+set tab-size = 4
+set refresh-mode = manual
+
+set main-view-commit-title-graph = v2
+#set main-view-date-display = relative
+set main-view-author-display = email-user
+
+set main-view = id date:relative author:email-user commit-title
+set main-view-author-maxwidth = 12
+set main-view-commit-title-graph = v2
+set main-view-commit-title-refs = yes
+
+set refs-view = date:relative author:email-user ref commit-title
+set refs-view-author-maxwidth = 12
+bind ref C +git checkout %(branch)
+
+set diff-view-line-number-display = 1
+set diff-view-line-number-interval = 1
+set diff-view-line-number-width = 4

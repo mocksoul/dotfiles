@@ -9,6 +9,10 @@ mkdir -p $H/.local/share/zsh
 ln -sfn $P/zsh $H/.config/zsh
 ln -sfn $H/.config/zsh/zshrc $H/.zshrc
 
+ln -sfn $P/bash/bashrc $H/.bashrc
+ln -sfn $P/bash/bash_profile $H/.bash_profile
+ln -sfn $P/bash/bash_logout $H/.bash_logout
+
 ln -sfn $H/.config/vim/vimrc $H/.vimrc
 ln -sfn $P/vim $H/.config/vim
 
@@ -20,6 +24,15 @@ ln -sfn $P/alacritty $H/.config/alacritty
 ln -sfn $P/bin/alacritty_quake_toggle $H/.local/bin
 
 ln -sfn $P/kde/khotkeysrc $H/.config
+
+ln -sfn $P/git/gitconfig $H/.gitconfig
+ln -sfn $P/git/tigrc $H/.tigrc
+
+ln -sfn $P/top/toprc $H/.toprc
+
+ln -sfn $P/arc/arcconfig $H/.arcconfig
+ln -sfn $P/arc/arcignore $H/.arcignore
+ln -sfn $P/arc/arcignore.symlink $H/.arcignore.symlink
 
 # Checkout zsh plugins if we didnt do that yet
 [ ! -d $H/.local/share/zsh/plug/wakatime ] && git clone https://github.com/sobolevn/wakatime-zsh-plugin.git $H/.local/share/zsh/plug/wakatime
