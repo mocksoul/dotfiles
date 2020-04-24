@@ -1,0 +1,37 @@
+[core]
+    pager = bat -pp --pager=\"less -RFXe\"
+    excludesfile = ~/.gitignore
+[color]
+    diff = auto
+    status = auto
+    branch = auto
+[user]
+    email = mocksoul@gmail.com
+    name = Vadim Fint
+[github]
+    user = mocksoul@gmail.com
+    token = 81c10b7d48acd7e8e668afac74736f03
+[alias]
+    l = log --graph --pretty=mline -n30
+    ll = log --graph -n10
+    ci = commit
+    st = status
+    co = checkout
+    br = branch
+    crec = crecord
+    outgoing = "!B=$(git branch --show-current); echo fetching...; git fetch origin; git log --oneline --graph origin/$B..$B"
+    out = outgoing
+    incoming = "!B=$(git branch --show-current); echo fetching...; git fetch origin; git log --oneline --graph $B..origin/$B"
+    inc = incoming
+    mockmerge = "!f() { B=$(git branch --show-current) && git merge --no-ff -m \"merge ($1 => $B)\" --log -e $1; }; f"
+[man]
+    viewer = catman
+[man "catman"]
+    #cmd = man -P \"bat -l man -pp\"
+    cmd = man -P \"manpager -RXe\"
+[cola]
+    spellcheck = false
+[sequence]
+    editor = interactive-rebase-tool
+[pretty]
+    mline = "format:%C(yellow)%h %Creset- %C(brightwhite)%s %C(brightred)%D %C(brightblack)%ar %C(white)%cl %Creset"

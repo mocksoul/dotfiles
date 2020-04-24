@@ -21,6 +21,9 @@ ln -sfn $P/bin/alacritty_quake_toggle $H/.local/bin
 
 ln -sfn $P/kde/khotkeysrc $H/.config
 
+ln -sfn $P/git/gitconfig $H/.gitconfig
+ln -sfn $P/git/tigrc $H/.tigrc
+
 # Checkout zsh plugins if we didnt do that yet
 [ ! -d $H/.local/share/zsh/plug/wakatime ] && git clone https://github.com/sobolevn/wakatime-zsh-plugin.git $H/.local/share/zsh/plug/wakatime
 
