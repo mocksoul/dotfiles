@@ -56,7 +56,7 @@ savefullhist() {
 stty -ixon
 
 # Add wakatime plugin
-source ~/.config/zsh/plug/wakatime/wakatime.plugin.zsh
+source ~/.local/share/zsh/plug/wakatime/wakatime.plugin.zsh
 
 tmux_session() {
     local session_name="$1"
