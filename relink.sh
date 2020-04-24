@@ -9,6 +9,10 @@ mkdir -p $H/.local/share/zsh
 ln -sfn $P/zsh $H/.config/zsh
 ln -sfn $H/.config/zsh/zshrc $H/.zshrc
 
+ln -sfn $P/bash/bashrc $H/.bashrc
+ln -sfn $P/bash/bash_profile $H/.bash_profile
+ln -sfn $P/bash/bash_logout $H/.bash_logout
+
 ln -sfn $H/.config/vim/vimrc $H/.vimrc
 ln -sfn $P/vim $H/.config/vim
 
