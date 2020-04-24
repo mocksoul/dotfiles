@@ -5,7 +5,9 @@ H=$HOME
 
 mkdir -p $H/.local/share/nvim/{plugged,shada,swap,view}
 
-ln -sfn $P/zsh/zshrc $H/.zshrc
+ln -sfn $P/zsh $H/.config/zsh
+ln -sfn $H/.config/zsh/zshrc $H/.zshrc
+[ ! -d $P/zsh/plug/wakatime ] && git clone https://github.com/sobolevn/wakatime-zsh-plugin.git $P/zsh/plug/wakatime
 
 ln -sfn $P/vim/vimrc $H/.vimrc
 ln -sfn $P/vim/vim $H/.config/vim
