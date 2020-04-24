@@ -9,8 +9,8 @@ ln -sfn $P/zsh $H/.config/zsh
 ln -sfn $H/.config/zsh/zshrc $H/.zshrc
 [ ! -d $P/zsh/plug/wakatime ] && git clone https://github.com/sobolevn/wakatime-zsh-plugin.git $P/zsh/plug/wakatime
 
-ln -sfn $P/vim/vimrc $H/.vimrc
-ln -sfn $P/vim/vim $H/.config/vim
+ln -sfn $P/vim $H/.config/vim
+ln -sfn $H/.config/vim/vimrc $H/.vimrc
 ln -sfn $H/.local/share/nvim/view $H/.vim/view
 
 ln -sfn $P/tmux/tmux.conf $H/.tmux.conf
