@@ -26,6 +26,10 @@ ln -sfn $P/git/tigrc $H/.tigrc
 
 ln -sfn $P/top/toprc $H/.toprc
 
+ln -sfn $P/arc/arcconfig $H/.arcconfig
+ln -sfn $P/arc/arcignore $H/.arcignore
+ln -sfn $P/arc/arcignore.symlink $H/.arcignore.symlink
+
 # Checkout zsh plugins if we didnt do that yet
 [ ! -d $H/.local/share/zsh/plug/wakatime ] && git clone https://github.com/sobolevn/wakatime-zsh-plugin.git $H/.local/share/zsh/plug/wakatime
 
