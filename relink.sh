@@ -24,6 +24,8 @@ ln -sfn $P/kde/khotkeysrc $H/.config
 ln -sfn $P/git/gitconfig $H/.gitconfig
 ln -sfn $P/git/tigrc $H/.tigrc
 
+ln -sfn $P/top/toprc $H/.toprc
+
 # Checkout zsh plugins if we didnt do that yet
 [ ! -d $H/.local/share/zsh/plug/wakatime ] && git clone https://github.com/sobolevn/wakatime-zsh-plugin.git $H/.local/share/zsh/plug/wakatime
 
