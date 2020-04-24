@@ -31,7 +31,22 @@
     cmd = man -P \"manpager -RXe\"
 [cola]
     spellcheck = false
+    tabwidth = 4
+    expandtab = true
+    theme = flat-dark-grey
+    icontheme = dark
+    boldheaders = true
+    statusshowtotals = true
+    statusindent = false
+    blameviewer = git gui blame
 [sequence]
     editor = interactive-rebase-tool
 [pretty]
     mline = "format:%C(yellow)%h %Creset- %C(brightwhite)%s %C(brightred)%D %C(brightblack)%ar %C(white)%cl %Creset"
+[diff]
+    tool = meld
+[merge]
+    tool = meld
+[gui]
+    editor = alacritty -e vim --
+    historybrowser = gitk
