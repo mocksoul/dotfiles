@@ -144,6 +144,9 @@ function git() {
     if [ "$1" = "merge" ] && [[ "$@" != *"--help" ]] ; then
         shift 1;
         command git mockmerge "$@"
+    elif [ "$1" = "stockmerge" ]; then
+        shift 1;
+        command git merge "$@"
     else
         command git "$@"
     fi
