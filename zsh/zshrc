@@ -135,25 +135,6 @@ fi
 #export PATH="$PATH:/home/mocksoul/Downloads/htcone/adt-bundle-linux-x86-20130522/sdk/platform-tools"
 export PATH="$HOME/.local/bin:$PATH"
 
-adbftp() {
-    adb forward tcp:2121 tcp:2121
-    adb forward tcp:1024 tcp:1024
-    echo "Use ftp://localhost:2121"
-}
-
-htcmount() {
-    sudo mkdir -p /var/run/media/mocksoul/htcone
-    sudo chown mocksoul:users /var/run/media/mocksoul/htcone
-    simple-mtpfs -f -o allow_other,auto_unmount,hard_remove,enable-move,tmp-dir=/home/mocksoul/tmp /var/run/media/mocksoul/htcone
-    sudo rmdir /var/run/media/mocksoul/htcone
-    sudo rmdir /var/run/media/mocksoul
-    sudo rmdir /var/run/media
-}
-
-creq() {
-    hg qcrecord -e $(python -c "import uuid; print(uuid.uuid4().hex)") .
-}
-
 alias sshome='ssh home'
 
 alias vim='nvim -u ~/.vimrc'
