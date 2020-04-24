@@ -1,0 +1,152 @@
+# Created by newuser for 4.3.9
+
+source /etc/zsh/zprofile
+
+alias nano=vim
+alias svn=colorsvn
+alias td='todo -s +children'
+alias t='task'
+alias sdev='ssh dev'
+
+export EDITOR=/usr/bin/vim
+#export PATH="/usr/libexec/cw:$PATH"
+
+export VISUAL=vim
+autoload edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd v edit-command-line
+bindkey '^x^e' edit-command-line
+bindkey '^xe' edit-command-line
+
+export CW_NORANDOM=1
+export CW_COLORIZE=brown:yellow
+export CW_SHLVL=$SHLVL
+
+export NMON=clvkm
+alias nmon='nmon -s 1'
+
+#export CW_COLORIZE=yellow:grey+:blue:cyan:red:magenta
+
+# Colorize STDERR (buggy)
+#exec 2>>(while read line; do
+#  print '\e[91m'${(q)line}'\e[0m' > /dev/tty; print -n $'\0'; done &
+#)
+
+fgvim() {
+    fg %vim
+}
+
+zle -N fgvim
+bindkey '^Z' fgvim
+bindkey '^[[1;5D' backward-word
+bindkey '^[[1;5C' forward-word
+
+savefullhist() {
+    local C=${1%%$'\n'}
+    C=${C#${C%%[![:space:]]*}}
+    C=${C%${C##*[![:space:]]}}
+    [ -z "$C" ] && return
+    [ -x ~/bin/savehist ] && ~/bin/savehist "$C"
+}
+
+#add-zsh-hook zshaddhistory savefullhist
+
+
+# Disable C-s/C-q flow control completely
+stty -ixon
+
+# Add wakatime plugin
+source ~/.local/share/zsh/plug/wakatime/wakatime.plugin.zsh
+
+tmux_session() {
+    local session_name="$1"
+    [[ -z $session_name ]] && session_name=default
+    local dbusid="$KONSOLE_DBUS_SERVICE"
+    local stampfile="/tmp/${session_name}_tmux_dbus_session_id"
+    local attach=0
+
+    # Mangle backspace
+    # stty ek
+
+    if [ -z "$TMUX" ]; then
+        tmux has-session -t "$session_name"
+        if [ "$?" -eq 0 ]; then
+            # if we have some clients attached to session
+            # and stamp file exists and its contents match our
+            # current dbus session id -- dont attach. Probably we
+            # opened tab in same terminal application.
+            [[ \
+                "$(tmux list-clients -t "$session_name")" != "" && \
+                -f "$stampfile" && \
+                "$(cat "$stampfile")" == "$dbusid" \
+            ]] && return
+            attach=1
+        fi
+
+        # Store dbus session id in stamp, since we definitely will
+        # open tmux session now
+        [[ ! -z $dbusid ]] && echo "$dbusid" > "$stampfile"
+
+        if [[ $attach -eq 1 ]]; then
+            tmux attach -t "$session_name"
+        else
+            tmux new -s "$session_name"
+        fi
+
+        local rcode=$?
+
+        # Drop stamp file if we were last active client connected to session
+        tmux list-clients -t "$session_name"
+        [[ "$(tmux list-clients -t "$session_name")" == "" ]] && rm -f "$stampfile"
+
+        exit $rcode
+    fi
+}
+
+tmux_update_environment() {
+    local updated=0
+    local removed=0
+
+    for opt in $(tmux show-environment); do
+        if [[ $(echo $opt | cut -c 1) == - ]]; then
+            unset "${opt#-}"
+            let removed+=1
+        else
+            eval $opt
+            let updated+=1
+        fi
+    done
+
+    echo "Updated: $updated; removed: $removed"
+}
+
+[[ $YAKUAKE == 1 || $ALACRITTYQUAKE == 1 ]] && tmux_session yakuake
+if [[ $SHELL_WORK_SKYNET == 1 ]]; then
+    unset SHELL_WORK_SKYNET
+    tmux_session skynet
+elif [[ $SHELL_WORK_SKYNETBIN == 1 ]]; then
+    unset SHELL_WORK_SKYNETBIN
+    tmux_session skynetbin
+elif [[ $SHELL_WORK_SKYNETCOPIER == 1 ]]; then
+    unset SHELL_WORK_SKYNETCOPIER
+    tmux_session skynetcopier
+fi
+
+#export PATH="$PATH:/home/mocksoul/Downloads/htcone/adt-bundle-linux-x86-20130522/sdk/platform-tools"
+export PATH="$HOME/.local/bin:$PATH"
+
+alias sshome='ssh home'
+
+alias vim='nvim -u ~/.vimrc'
+alias vi='vim'
+
+function git() {
+    if [ "$1" = "merge" ] && [[ "$@" != *"--help" ]] ; then
+        shift 1;
+        command git mockmerge "$@"
+    else
+        command git "$@"
+    fi
+}
+
+alias g='git'
