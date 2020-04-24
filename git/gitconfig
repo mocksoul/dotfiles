@@ -12,16 +12,16 @@
     user = mocksoul@gmail.com
     token = 81c10b7d48acd7e8e668afac74736f03
 [alias]
-    l = log --graph --pretty=mline -n30
-    ll = log --graph -n10
+    l = log --graph --pretty=mline -n30 --date-order
+    ll = log --graph -n10 --date-order
     ci = commit
     st = status
     co = checkout
     br = branch
     crec = crecord
-    outgoing = "!B=$(git branch --show-current); echo fetching...; git fetch origin; git log --oneline --graph origin/$B..$B"
+    outgoing = "!B=$(git branch --show-current); echo fetching...; git fetch origin; git l -n9999 origin/$B..$B \"$@\""
     out = outgoing
-    incoming = "!B=$(git branch --show-current); echo fetching...; git fetch origin; git log --oneline --graph $B..origin/$B"
+    incoming = "!B=$(git branch --show-current); echo fetching...; git fetch origin; git l -n9999 $B..origin/$B \"$@\""
     inc = incoming
     mockmerge = "!f() { for M in $@; do :; done; B=$(git branch --show-current) && git merge --no-ff -m \"merge ($M => $B)\" --log -e \"$@\"; }; f"
 [man]
