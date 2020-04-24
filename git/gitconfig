@@ -23,7 +23,7 @@
     out = outgoing
     incoming = "!B=$(git branch --show-current); echo fetching...; git fetch origin; git log --oneline --graph $B..origin/$B"
     inc = incoming
-    mockmerge = "!f() { B=$(git branch --show-current) && git merge --no-ff -m \"merge ($1 => $B)\" --log -e $1; }; f"
+    mockmerge = "!f() { for M in $@; do :; done; B=$(git branch --show-current) && git merge --no-ff -m \"merge ($M => $B)\" --log -e \"$@\"; }; f"
 [man]
     viewer = catman
 [man "catman"]
