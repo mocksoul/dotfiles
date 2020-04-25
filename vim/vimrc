@@ -326,6 +326,9 @@ let g:vimwiki_hl_cb_checked = 1
 let g:vimwiki_auto_checkbox = 1
 let g:vimwiki_table_mappings = 0
 let g:vimwiki_table_auto_fmt = 0
+let g:vimwiki_list = [{
+    \'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'
+\}]
 au FileType vimwiki set shiftwidth=2 tabstop=2 softtabstop=2
 " }}}
 " * taskwiki {{{
