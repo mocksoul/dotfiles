@@ -152,5 +152,5 @@ function git() {
     fi
 }
 
-alias g='git'
+alias gi='git'
 alias lg='lazygit'
