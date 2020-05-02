@@ -33,7 +33,7 @@ alias nmon='nmon -s 1'
 #)
 
 fgvim() {
-    fg %vim
+    fg %nvim
 }
 
 zle -N fgvim
