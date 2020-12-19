@@ -1,2 +1,13 @@
 **/qdm-mds-cli/tst
 **/qdm-mds-cli/data-src
+**/skyboned/api/example/example_data
+**/skyboned/api/example_py2/example_data
+**/skyboned/pkg/share
+**/skyboned/pkg/stage-skyboned-prod.yaml
+**/pahom/bin/*/*.cache
+**/pahom/**/venv
+**/pahom/pkg/mkpkg
+**/pahom/pkg/share
+**/pahom/pkg/packages.json
+**/pahom/bak
+**/pahom/scripts

@@ -1,5 +1,13 @@
 [core]
-pager = bat -p -l gitlog
+pager = bat --paging=auto --pager 'less -RXFe' -p
+#pager = bat -p -l gitlog
+
+
+[diff]
+tool = vimdiff
+
+[merge]
+tool = meld
 
 [alias]
 d = diff HEAD
