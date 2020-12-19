@@ -185,16 +185,16 @@ imap <A-Up> <C-o><A-Up>
 
 " Scroll up/down by 4 line using Ctrl-Up/Down (Ctrl-Shift-Up/Down)
 noremap <silent> <C-S-A-Up> <C-y>
-noremap <silent> <C-S-Up> 5<C-y>
-map <silent> <C-Up> <C-S-Up>5<Up>
-inoremap <silent> <C-S-Up> <C-o>5<C-y>
-imap <silent> <C-Up> <C-S-Up><C-o>5<Up>
+noremap <silent> <C-S-Up> 3<C-y>
+map <silent> <C-Up> <C-S-Up>3<Up>
+inoremap <silent> <C-S-Up> <C-o>3<C-y>
+imap <silent> <C-Up> <C-S-Up><C-o>3<Up>
 
 noremap <silent> <C-S-A-Down> <C-e>
-noremap <silent> <C-S-Down> 5<C-e>
-map <silent> <C-Down> <C-S-Down>5<Down>
-inoremap <silent> <C-S-Down> <C-o>5<C-e>
-imap <silent> <C-Down> <C-S-Down><C-o>5<Down>
+noremap <silent> <C-S-Down> 3<C-e>
+map <silent> <C-Down> <C-S-Down>3<Down>
+inoremap <silent> <C-S-Down> <C-o>3<C-e>
+imap <silent> <C-Down> <C-S-Down><C-o>3<Down>
 
 noremap <Backspace> <Nop>
 noremap <Enter> <Nop>
