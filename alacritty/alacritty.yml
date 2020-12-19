@@ -15,6 +15,9 @@ env:
   ALACRITTY: '1'
 
 window:
+  # Allow terminal applications to change Alacritty's window title.
+  dynamic_title: true
+
   # Window dimensions (changes require restart)
   #
   # Specified in number of columns/lines, not pixels.
@@ -109,7 +112,7 @@ font:
     #style: Regular
 
   # Bold font face
-  #bold:
+  bold:
     # Font family
     #
     # If the bold family is not specified, it will fall back to the
@@ -118,6 +121,7 @@ font:
 
     # The `style` can be specified to pick a specific face.
     #style: Bold
+    style: Regular
 
   # Italic font face
   #italic:
@@ -276,7 +280,7 @@ colors:
 #   - Linear
 #
 # Specifying a `duration` of `0` will disable the visual bell.
-visual_bell:
+bell:
   animation: Linear
   duration: 0  # 15
   color: '#111111'
@@ -292,9 +296,6 @@ selection:
 
   # When set to `true`, selected text will be copied to the primary clipboard.
   save_to_clipboard: true
-
-# Allow terminal applications to change Alacritty's window title.
-dynamic_title: true
 
 cursor:
   # Cursor style
