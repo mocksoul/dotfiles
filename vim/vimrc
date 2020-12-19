@@ -396,6 +396,14 @@ highlight Error term=reverse ctermfg=White ctermbg=124 guifg=White guibg=Red
 highlight SpellBad term=reverse cterm=bold ctermfg=White ctermbg=88 gui=undercurl guisp=Red
 highlight SpellCap term=reverse cterm=undercurl ctermfg=White ctermbg=88 gui=undercurl guisp=Red
 " }}}
+
+" * pudb.vim {{{
+"Plug 'SkyLeach/pudb.vim'
+Plug 'KangOl/vim-pudb'
+nnoremap <F8> :TogglePudbBreakPoint<CR>
+inoremap <F8> <ESC>:TogglePudbBreakPoint<CR>a
+" }}}
+
 " * vim-addon-local-vimrc {{{
 Plug 'MarcWeber/vim-addon-local-vimrc'
 " }}}
