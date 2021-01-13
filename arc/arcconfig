@@ -4,7 +4,7 @@ pager = bat --paging=auto --pager 'less -RXFe' -p
 
 
 [diff]
-tool = vimdiff
+tool = meld
 
 [merge]
 tool = meld
