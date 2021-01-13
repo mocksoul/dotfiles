@@ -49,6 +49,8 @@ savefullhist() {
     [ -x ~/bin/savehist ] && ~/bin/savehist "$C"
 }
 
+# dont remember that was needed. But this will rewrite .history_full every command
+# written. So, disabled
 #add-zsh-hook zshaddhistory savefullhist
 
 
