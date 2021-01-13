@@ -37,6 +37,7 @@ items = [
     '~/.gitconfig',                         '~/.config/git/gitconfig',
     '~/.gitignore',                         '~/.config/git/gitignore',
     '~/.tigrc',                             '~/.config/git/tigrc',
+    '~/.local/bin/lazygit',                 '~/go/src/github.com/jesseduffield/lazygit/lazygit', NOREL,
 
     'o/top',                                '~/.config/top',
     '~/.toprc',                             '~/.config/top/toprc',
@@ -46,6 +47,20 @@ items = [
     '~/.arcignore',                         '~/.config/arc/arcignore',
     '~/.arcignore.symlink',                 '~/.config/arc/arcignore.symlink',
 ]
+
+
+mkdirs = [
+    '~/.local/share/nvim/plugged',
+    '~/.local/share/nvim/shada',
+    '~/.local/share/nvim/swap',
+    '~/.local/share/nvim/view',
+    '~/.local/share/zsh'
+]
+
+zshplugs = (
+    '[ ! -d $H/.local/share/zsh/plug/wakatime ] && '
+    'git clone https://github.com/sobolevn/wakatime-zsh-plugin.git $H/.local/share/zsh/plug/wakatime'
+)
 
 
 def pairopts():
