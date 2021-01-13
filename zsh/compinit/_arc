@@ -34,6 +34,7 @@ _arc() {
         'add':'Add file contents to the index'
         'clean':'Remove untracked files from the working tree'
         'cp':'Copy a file, a directory, or a symlink'
+        'encrypt':'Encrypt file'
         'mergetool':'Run merge conflict resolution tools to resolve merge conflicts'
         'mv':'Move or rename a file, a directory, or a symlink'
         'reset':'Reset current HEAD to the specified state'
@@ -45,6 +46,7 @@ _arc() {
       desc='examine the history and state'
       modes=(
         'blame':'Show what revision and author last modified each line of a file'
+        'describe':'Describe a commit using the most recent tag reachable from it'
         'diff':'Show changes between commits, commit and working tree, etc'
         'difftool':'View diff using difftools'
         'ls-files':'Show information about files in the index and the working tree'
@@ -83,16 +85,20 @@ _arc() {
         'fsck':'Verifies the connectivity and validity of the objects in the database'
         'archive':'Create an archive of files from a named tree'
         'export':'Exports a named tree'
+        'gc':'Cleanup object store'
       )
       _describe -t 'mode-group-6' $desc modes
 
       desc='internal operations'
       modes=(
         'config':'Manage user configuration'
+        'dump':'Various debug information'
+        'gen-key':'Generate new encryption key and store it in YAV'
         'info':'Show current branch information'
         'ls-tree':'List the contents of a tree object'
-        'dump':'Various debug information'
         'rev-parse':'Pick out and massage parameters'
+        'token':'Acquire arc oauth token with ssh key'
+        'prefetch-files':'Prefetch files'
         'repair-command'
         'list-commands':'List arc commands in JSON'
         'completion':'generate autocompletion files'
@@ -110,6 +116,7 @@ _arc() {
             '(--port -p)'{'-p','--port'}'[port of arc data service]: :_default' \
             '(-r --repository)'{'-r','--repository'}'[name of the repository]: :_default' \
             '(--bare)--bare[initialize bare repository]' \
+            '(--object-store)--object-store[shared store for storing objects of multiple mounts]:PATH:_default' \
             '1:ARG:_default' \
             && ret=0
           ;;
@@ -137,6 +144,7 @@ _arc() {
             '(--object-store)--object-store[shared store for storing objects of multiple mounts]:PATH:_default' \
             '(--frozen)--frozen[mounted filesystem cannot be modified through arc CLI]' \
             '(--read-only)--read-only[mount filesystem read-only]' \
+            '(-o)-o[extra mount option (advanced)]:OPTION:_default' \
             '(-C --cache-size)'{'-C','--cache-size'}'[memory size for cache in bytes]:NUM:_default' \
             '(--fetch-trees)--fetch-trees[prefetch directory entries in background]::BOOL:_default' \
             '(--monitoring-port)--monitoring-port[start monitoring server on port]::PORT:_default' \
@@ -155,6 +163,7 @@ _arc() {
             '(* : -)'{'-h','--help'}'[print usage]' \
             '(--all -A)'{'-A','--all'}'[add changes from all tracked and untracked files]' \
             '(--dry-run -n)'{'-n','--dry-run'}'[dry run]' \
+            '(--force -f)'{'-f','--force'}'[add even ignored files]' \
             '(-p --patch)'{'-p','--patch'}'[interactively choose hunks of patch]' \
             '(-u --update)'{'-u','--update'}'[update tracked files]' \
             '(-v --verbose)'{'-v','--verbose'}'[be verbose]' \
@@ -184,6 +193,14 @@ _arc() {
             '1:ARG:_default' \
             '2:ARG:_default' \
             '3:ARG:_default' \
+            && ret=0
+          ;;
+        'encrypt')
+          _arguments -s \
+            '(* : -)--svnrevision[print svn version]' \
+            '(* : -)'{'-h','--help'}'[print usage]' \
+            '1:SECRETID:_default' \
+            '*:PATH:_default' \
             && ret=0
           ;;
         'mergetool')
@@ -296,6 +313,7 @@ _arc() {
                 'list')
                   _arguments -s \
                     '(* : -)--svnrevision[print svn version]' \
+                    '(--json)--json[output in json format]' \
                     '(* : -)'{'-h','--help'}'[print usage]' \
                     '*:ARG:_default' \
                     && ret=0
@@ -349,6 +367,23 @@ _arc() {
             '2:ARG:_default' \
             && ret=0
           ;;
+        'describe')
+          _arguments -s \
+            '(* : -)--svnrevision[print svn version]' \
+            '(* : -)'{'-h','--help'}'[print usage]' \
+            '(--all)--all[use any ref]' \
+            '(--long)--long[always use long format]' \
+            '(--first-parent)--first-parent[only follow first parent]' \
+            '(--exact-match)--exact-match[only output exact matches]' \
+            '(--match)--match[only consider tags matching <pattern>]:<pattern>:_default' \
+            '(--exclude)--exclude[do not consider tags matching <pattern>]:<pattern>:_default' \
+            '(--always)--always[show abbreviated commit object as fallback]' \
+            '(--dirty)--dirty[append <mark> on dirty working tree]::<mark>:_default' \
+            '(--candidates)--candidates[consider <n> most recent tags (default\: 10)]:<n>:_default' \
+            '(--svn)--svn[use svn revisions as tags]' \
+            '*:ARG:_default' \
+            && ret=0
+          ;;
         'diff')
           _arguments -s \
             '(* : -)--svnrevision[print svn version]' \
@@ -361,6 +396,7 @@ _arc() {
             '(--resolve-moves)--resolve-moves[(experimental) resolve and show path copies & moves]: :_default' \
             '(--svn)--svn[use svn compatible diff format]' \
             '(--git)--git[use git compatible diff format]' \
+            '(--stat)--stat[show diffstat]' \
             '(--json)--json[output in json format]' \
             '*:ARG:_default' \
             && ret=0
@@ -404,6 +440,10 @@ _arc() {
             '(--before)--before[show commits older than a specific date]: :_default' \
             '(--name-only)--name-only[show only names of changed files]' \
             '(--name-status)--name-status[show only names and status of changed files]' \
+            '(-p --patch)'{'-p','--patch'}'[generate patch]' \
+            '(-U --unified)'{'-U','--unified'}'[generate diffs with <n> lines of context.]: :_default' \
+            '(--resolve-moves)--resolve-moves[(experimental) resolve and show path copies & moves]' \
+            '(--attrs)--attrs[show attributes]' \
             '*:ARG:_default' \
             && ret=0
           ;;
@@ -511,6 +551,7 @@ _arc() {
             '(--git)--git[use git compatible diff format]' \
             '(--stat)--stat[show diffstat]' \
             '(--json)--json[output in json format]' \
+            '(--attrs)--attrs[show attributes]' \
             '*:ARG:_default' \
             && ret=0
           ;;
@@ -531,23 +572,24 @@ _arc() {
           _arguments -s \
             '(* : -)--svnrevision[print svn version]' \
             '(* : -)'{'-h','--help'}'[print usage]' \
-            '(-v --verbose)'{'-v','--verbose'}'[show hash and subject]' \
+            '(-v --verbose)'{'-v','--verbose'}'[show hash and subject, give twice for upstream branch]' \
             '(-q --quiet)'{'-q','--quiet'}'[suppress informational messages]' \
             '(--set-upstream-to -u)'{'-u','--set-upstream-to'}'[change the upstream info]: :_default' \
             '(--unset-upstream)--unset-upstream[unset the upstream info]' \
             '(-a --all)'{'-a','--all'}'[list both remote-tracking and local branches]' \
-            '(--move -m)'{'-m','--move'}'[move/rename branch.]' \
-            '(-M)-M[shortcut for --move --force.]' \
-            '(-d --delete)'{'-d','--delete'}'[delete fully merged branch]: :_arc__completer_2' \
-            '(-D)-D[delete branch (even if not merged)]: :_arc__completer_3' \
+            '(--move -m)'{'-m','--move'}'[move/rename branch]' \
+            '(-M)-M[shortcut for --move --force]' \
+            '(-d --delete)'{'-d','--delete'}'[delete fully merged branch]' \
+            '(-D)-D[delete branch (even if not merged)]' \
             '(--list -l)'{'-l','--list'}'[list branch names]' \
             '(--force -f)'{'-f','--force'}'[force creation, move/rename, deletion]' \
             '(--merged)--merged[print only branches that are merged]::commit:_default' \
             '(--points-at)--points-at[print only branches of the object]: :_default' \
             '(--json)--json[output in json format]' \
             '(--desc)--desc[branch description]: :_default' \
-            '1:BRANCH:_arc__completer_4' \
-            '2:ARG:_default' \
+            '1:BRANCH:_arc__completer_2' \
+            '2:START:_arc__completer_3' \
+            '*:ARG:_arc__completer_4' \
             && ret=0
           ;;
         'checkout'|'co')
@@ -570,6 +612,7 @@ _arc() {
             '(--edit -e)'{'-e','--edit'}'[edit the commit message]' \
             '(-m --mainline)'{'-m','--mainline'}'[parent number]: :_default' \
             '(-X)-X[pass the argument through to the merge strategy]: :_default' \
+            '(-x)-x[append commit name]' \
             '(--allow-empty-message)--allow-empty-message[allow commits with empty messages]' \
             '(--abort)--abort[abort and check out the original branch]' \
             '(--continue)--continue[resume cherry-pick sequence]' \
@@ -583,6 +626,8 @@ _arc() {
             '(* : -)'{'-h','--help'}'[print usage]' \
             '(--file -F)'{'-F','--file'}'[read commit message from file]: :_default' \
             '(--message -m)'{'-m','--message'}'[commit message]: :_default' \
+            '(--squash)--squash[<commit>]: :_default' \
+            '(--fixup)--fixup[<commit>]: :_default' \
             '(-a --all)'{'-a','--all'}'[commit all changed files]' \
             '(--dry-run)--dry-run[show what would be committed]' \
             '(--allow-empty-message)--allow-empty-message[allow to create a commit with an empty commit message]' \
@@ -600,13 +645,15 @@ _arc() {
             '(* : -)'{'-h','--help'}'[print usage]' \
             '(-q --quiet)'{'-q','--quiet'}'[be quiet]' \
             '(-X)-X[pass the argument through to the merge strategy]: :_default' \
-            '(--onto)--onto[rebase onto given branch instead of upstream]: :_arc__completer_6' \
+            '(--onto)--onto[rebase onto given branch instead of upstream]:NEWBASE:_arc__completer_6' \
             '(--abort)--abort[abort and check out the original branch]' \
             '(--continue)--continue[restart the rebasing process after having resolved a merge conflict.]' \
             '(--skip)--skip[restart the rebasing process by skipping the current patch.]' \
             '(--sequence-path)--sequence-path[path to a sequence file in prototext format]: :_default' \
             '(--interactive -i)'{'-i','--interactive'}'[let the user edit the list of commits to rebase]' \
-            '1:rebase commits from current branch but that are not in UPSTREAM:_arc__completer_7' \
+            '(--autosquash)--autosquash[automatically modify the todo list of rebase -i so that the commit marked for squashing (by squash!/fixup!) comes right after the commit to be modified.]' \
+            '1:UPSTREAM:_arc__completer_7' \
+            '2:BRANCH:_arc__completer_8' \
             && ret=0
           ;;
         'revert')
@@ -639,7 +686,8 @@ _arc() {
           _arguments -s \
             '(* : -)--svnrevision[print svn version]' \
             '(* : -)'{'-h','--help'}'[print usage]' \
-            '(--all)--all[fetch from all remotes]' \
+            '(--all)--all[fetch all refs]' \
+            '(--verbose)--verbose[print updated refs to stdout]' \
             '*:ARG:_default' \
             && ret=0
           ;;
@@ -687,6 +735,7 @@ _arc() {
                     '(--edit -e)'{'-e','--edit'}'[force edit of description]' \
                     '(--no-edit)--no-edit[use the selected description without launching an editor]' \
                     '(--no-commits)--no-commits[do not include descriptions of commits to merge]' \
+                    '(--to)--to[target branch]: :_default' \
                     '(--force -f)'{'-f','--force'}'[force creation of a pull request]' \
                     '(--follow)--follow[trace status of the pull request]' \
                     '(--auto -A)'{'-A','--auto'}'[auto-merges PR after checks are passed]' \
@@ -743,7 +792,8 @@ _arc() {
             '(--all)--all[fetch all references]' \
             '(--force -f)'{'-f','--force'}'[force checkout (throw away local modifications)]' \
             '(--ff-only)--ff-only[abort if fast-forward is not possible]' \
-            '1:ARG:_default' \
+            '(-r --rebase)'{'-r','--rebase'}'[rebase if branches diverge]::false|true|interactive:_default' \
+            '1:BRANCH:_arc__completer_9' \
             && ret=0
           ;;
         'push')
@@ -785,34 +835,22 @@ _arc() {
             '*:ARG:_default' \
             && ret=0
           ;;
+        'gc')
+          _arguments -s \
+            '(* : -)--svnrevision[print svn version]' \
+            '(* : -)'{'-h','--help'}'[print usage]' \
+            '(--dry-run -n)'{'-n','--dry-run'}'[show what would be collected]' \
+            && ret=0
+          ;;
         'config')
           _arguments -s \
             '(* : -)--svnrevision[print svn version]' \
             '(* : -)'{'-h','--help'}'[print usage]' \
             '(--list -l)'{'-l','--list'}'[List existing options]' \
+            '(--unset)--unset[Unset option]' \
+            '(--remove-section)--remove-section[Remove section with all its options]' \
             '(--name-only)--name-only[Show only names for --list]' \
             '(--file)--file[Config file used to set values]: :_default' \
-            '1:ARG:_default' \
-            '2:ARG:_default' \
-            && ret=0
-          ;;
-        'info')
-          _arguments -s \
-            '(* : -)--svnrevision[print svn version]' \
-            '(* : -)'{'-h','--help'}'[print usage]' \
-            '(--json)--json[output in json]' \
-            && ret=0
-          ;;
-        'ls-tree')
-          _arguments -s \
-            '(* : -)--svnrevision[print svn version]' \
-            '(* : -)'{'-h','--help'}'[print usage]' \
-            '(-d)-d[only show trees (implies -t)]' \
-            '(-r)-r[recurse into subtrees]' \
-            '(-t)-t[show trees when recursing]' \
-            '(--name-only)--name-only[list only filenames]' \
-            '(--full-name)--full-name[use full path names]' \
-            '(--json)--json[json output]' \
             '1:ARG:_default' \
             '2:ARG:_default' \
             && ret=0
@@ -833,6 +871,9 @@ _arc() {
                 'object':'dump object'
                 'svn-rev':'commit id for given svn revision'
                 'changeset':'dump list of changed objects'
+                'stage':'dump stage'
+                'merge-base':'dump merge-base info'
+                'has-changes':'check vfs changes'
               )
               _describe -t 'mode-group-0' $desc modes
 
@@ -844,6 +885,7 @@ _arc() {
                     '(* : -)--svnrevision[print svn version]' \
                     '(* : -)'{'-h','--help'}'[print usage]' \
                     '(-b --bundle)'{'-b','--bundle'}'[create debug bundle]' \
+                    '(-c --changed)'{'-c','--changed'}'[include .changed]' \
                     '(-o --output)'{'-o','--output'}'[write bundle to FILE instead of temporary file]:FILE:_default' \
                     && ret=0
                   ;;
@@ -878,9 +920,57 @@ _arc() {
                     '2:ARG:_default' \
                     && ret=0
                   ;;
+                'stage')
+                  _arguments -s \
+                    '(* : -)--svnrevision[print svn version]' \
+                    '(* : -)'{'-h','--help'}'[print usage]' \
+                    && ret=0
+                  ;;
+                'merge-base')
+                  _arguments -s \
+                    '(* : -)--svnrevision[print svn version]' \
+                    '(* : -)'{'-h','--help'}'[print usage]' \
+                    '1:ARG:_default' \
+                    '2:ARG:_default' \
+                    && ret=0
+                  ;;
+                'has-changes')
+                  _arguments -s \
+                    '(* : -)--svnrevision[print svn version]' \
+                    '(* : -)'{'-h','--help'}'[print usage]' \
+                    '*:ARG:_default' \
+                    && ret=0
+                  ;;
               esac
               ;;
           esac
+          ;;
+        'gen-key')
+          _arguments -s \
+            '(* : -)--svnrevision[print svn version]' \
+            '(* : -)'{'-h','--help'}'[print usage]' \
+            && ret=0
+          ;;
+        'info')
+          _arguments -s \
+            '(* : -)--svnrevision[print svn version]' \
+            '(* : -)'{'-h','--help'}'[print usage]' \
+            '(--json)--json[output in json]' \
+            && ret=0
+          ;;
+        'ls-tree')
+          _arguments -s \
+            '(* : -)--svnrevision[print svn version]' \
+            '(* : -)'{'-h','--help'}'[print usage]' \
+            '(-d)-d[only show trees (implies -t)]' \
+            '(-r)-r[recurse into subtrees]' \
+            '(-t)-t[show trees when recursing]' \
+            '(--name-only)--name-only[list only filenames]' \
+            '(--full-name)--full-name[use full path names]' \
+            '(--json)--json[json output]' \
+            '1:ARG:_default' \
+            '2:ARG:_default' \
+            && ret=0
           ;;
         'rev-parse')
           _arguments -s \
@@ -898,6 +988,58 @@ _arc() {
             '(--is-local-repository)--is-local-repository' \
             '(--show-prefix)--show-prefix' \
             '(--show-toplevel)--show-toplevel' \
+            '*:ARG:_default' \
+            && ret=0
+          ;;
+        'token')
+          _arguments -C \
+            '(- : *)'{-h,--help}'[show help information]' \
+            '(-v --version -h --help --svnrevision)1: :->modes' \
+            '(-v --version -h --help --svnrevision)*:: :->args' \
+            && ret=0
+
+          case $state in
+            modes)
+              desc='modes'
+              modes=(
+              )
+
+              desc='Subcommands'
+              modes=(
+                'store':'store token to ~/.arc/token'
+                'show':'print token'
+              )
+              _describe -t 'mode-group-1' $desc modes
+
+              ;;
+            args)
+              case $line[1] in
+                'store')
+                  _arguments -s \
+                    '(* : -)--svnrevision[print svn version]' \
+                    '(* : -)'{'-h','--help'}'[print usage]' \
+                    && ret=0
+                  ;;
+                'show')
+                  _arguments -s \
+                    '(* : -)--svnrevision[print svn version]' \
+                    '(* : -)'{'-h','--help'}'[print usage]' \
+                    && ret=0
+                  ;;
+              esac
+              ;;
+          esac
+          ;;
+        'prefetch-files')
+          _arguments -s \
+            '(* : -)--svnrevision[print svn version]' \
+            '(* : -)'{'-h','--help'}'[print usage]' \
+            '(--remote-branches)--remote-branches[prefetch remote branches and objects for them]' \
+            '(--local-branches)--local-branches[prefetch objects for local branches]' \
+            '(--commit)--commit[prefetch objects from special commit]: :_default' \
+            '(--ignore-not-found)--ignore-not-found[skip commits where PATH is not found]' \
+            '(--best-effort)--best-effort[do not stop the process if any error occurs during fetching]' \
+            '(--quiet)--quiet[do not print warning and errors]' \
             '*:ARG:_default' \
             && ret=0
           ;;
@@ -929,46 +1071,13 @@ _arc() {
   return ret
 }
 
-(( $+functions[_arc__completer_7] )) ||
-_arc__completer_7() {
-  local expl action
-
-  _description 'alt-1' expl 'local branches'
-  _arc__completer_8 "${expl[@]}" 
-
-  _description 'alt-2' expl 'remote branches'
-  _arc__completer_9 "${expl[@]}" 
-}
-
 (( $+functions[_arc__completer_9] )) ||
 _arc__completer_9() {
-  local items=( "${(@f)$(${words_orig[@]} ---CUSTOM-COMPLETION--- RemoteBranch "${current_orig}" "${prefix_orig}" "${suffix_orig}")}" )
-
-  local rempat=${items[1]}
-  shift items
-
-  local sep=${items[1]}
-  shift items
-
-  local files=( ${items:#*"${sep}"} )
-  local filenames=( ${files#"${rempat}"} )
-  local dirs=( ${(M)items:#*"${sep}"} )
-  local dirnames=( ${dirs#"${rempat}"} )
-
-  local need_suf
-  compset -S "${sep}*" || need_suf="1"
-
-  compadd ${@} ${expl[@]} -d filenames -- ${(q)files}
-  compadd ${@} ${expl[@]} ${need_suf:+-S"${sep}"} -q -d dirnames -- ${(q)dirs%"${sep}"}
+  compadd ${@} ${expl[@]} -- "${(@f)$(${words_orig[@]} ---CUSTOM-COMPLETION--- LocalBranch "${current_orig}" "${prefix_orig}" "${suffix_orig}")}"
 }
 
 (( $+functions[_arc__completer_8] )) ||
 _arc__completer_8() {
-  compadd ${@} ${expl[@]} -- "${(@f)$(${words_orig[@]} ---CUSTOM-COMPLETION--- LocalBranch "${current_orig}" "${prefix_orig}" "${suffix_orig}")}"
-}
-
-(( $+functions[_arc__completer_6] )) ||
-_arc__completer_6() {
   local expl action
 
   _description 'alt-1' expl 'local branches'
@@ -1005,8 +1114,8 @@ _arc__completer_10() {
   compadd ${@} ${expl[@]} -- "${(@f)$(${words_orig[@]} ---CUSTOM-COMPLETION--- LocalBranch "${current_orig}" "${prefix_orig}" "${suffix_orig}")}"
 }
 
-(( $+functions[_arc__completer_5] )) ||
-_arc__completer_5() {
+(( $+functions[_arc__completer_7] )) ||
+_arc__completer_7() {
   local expl action
 
   _description 'alt-1' expl 'local branches'
@@ -1043,23 +1152,8 @@ _arc__completer_12() {
   compadd ${@} ${expl[@]} -- "${(@f)$(${words_orig[@]} ---CUSTOM-COMPLETION--- LocalBranch "${current_orig}" "${prefix_orig}" "${suffix_orig}")}"
 }
 
-(( $+functions[_arc__completer_4] )) ||
-_arc__completer_4() {
-  compadd ${@} ${expl[@]} -- "${(@f)$(${words_orig[@]} ---CUSTOM-COMPLETION--- LocalBranch "${current_orig}" "${prefix_orig}" "${suffix_orig}")}"
-}
-
-(( $+functions[_arc__completer_3] )) ||
-_arc__completer_3() {
-  compadd ${@} ${expl[@]} -- "${(@f)$(${words_orig[@]} ---CUSTOM-COMPLETION--- LocalBranch "${current_orig}" "${prefix_orig}" "${suffix_orig}")}"
-}
-
-(( $+functions[_arc__completer_2] )) ||
-_arc__completer_2() {
-  compadd ${@} ${expl[@]} -- "${(@f)$(${words_orig[@]} ---CUSTOM-COMPLETION--- LocalBranch "${current_orig}" "${prefix_orig}" "${suffix_orig}")}"
-}
-
-(( $+functions[_arc__completer_1] )) ||
-_arc__completer_1() {
+(( $+functions[_arc__completer_6] )) ||
+_arc__completer_6() {
   local expl action
 
   _description 'alt-1' expl 'local branches'
@@ -1093,6 +1187,130 @@ _arc__completer_15() {
 
 (( $+functions[_arc__completer_14] )) ||
 _arc__completer_14() {
+  compadd ${@} ${expl[@]} -- "${(@f)$(${words_orig[@]} ---CUSTOM-COMPLETION--- LocalBranch "${current_orig}" "${prefix_orig}" "${suffix_orig}")}"
+}
+
+(( $+functions[_arc__completer_5] )) ||
+_arc__completer_5() {
+  local expl action
+
+  _description 'alt-1' expl 'local branches'
+  _arc__completer_16 "${expl[@]}" 
+
+  _description 'alt-2' expl 'remote branches'
+  _arc__completer_17 "${expl[@]}" 
+}
+
+(( $+functions[_arc__completer_17] )) ||
+_arc__completer_17() {
+  local items=( "${(@f)$(${words_orig[@]} ---CUSTOM-COMPLETION--- RemoteBranch "${current_orig}" "${prefix_orig}" "${suffix_orig}")}" )
+
+  local rempat=${items[1]}
+  shift items
+
+  local sep=${items[1]}
+  shift items
+
+  local files=( ${items:#*"${sep}"} )
+  local filenames=( ${files#"${rempat}"} )
+  local dirs=( ${(M)items:#*"${sep}"} )
+  local dirnames=( ${dirs#"${rempat}"} )
+
+  local need_suf
+  compset -S "${sep}*" || need_suf="1"
+
+  compadd ${@} ${expl[@]} -d filenames -- ${(q)files}
+  compadd ${@} ${expl[@]} ${need_suf:+-S"${sep}"} -q -d dirnames -- ${(q)dirs%"${sep}"}
+}
+
+(( $+functions[_arc__completer_16] )) ||
+_arc__completer_16() {
+  compadd ${@} ${expl[@]} -- "${(@f)$(${words_orig[@]} ---CUSTOM-COMPLETION--- LocalBranch "${current_orig}" "${prefix_orig}" "${suffix_orig}")}"
+}
+
+(( $+functions[_arc__completer_4] )) ||
+_arc__completer_4() {
+  compadd ${@} ${expl[@]} -- "${(@f)$(${words_orig[@]} ---CUSTOM-COMPLETION--- LocalBranch "${current_orig}" "${prefix_orig}" "${suffix_orig}")}"
+}
+
+(( $+functions[_arc__completer_3] )) ||
+_arc__completer_3() {
+  local expl action
+
+  _description 'alt-1' expl 'local branches'
+  _arc__completer_18 "${expl[@]}" 
+
+  _description 'alt-2' expl 'remote branches'
+  _arc__completer_19 "${expl[@]}" 
+}
+
+(( $+functions[_arc__completer_19] )) ||
+_arc__completer_19() {
+  local items=( "${(@f)$(${words_orig[@]} ---CUSTOM-COMPLETION--- RemoteBranch "${current_orig}" "${prefix_orig}" "${suffix_orig}")}" )
+
+  local rempat=${items[1]}
+  shift items
+
+  local sep=${items[1]}
+  shift items
+
+  local files=( ${items:#*"${sep}"} )
+  local filenames=( ${files#"${rempat}"} )
+  local dirs=( ${(M)items:#*"${sep}"} )
+  local dirnames=( ${dirs#"${rempat}"} )
+
+  local need_suf
+  compset -S "${sep}*" || need_suf="1"
+
+  compadd ${@} ${expl[@]} -d filenames -- ${(q)files}
+  compadd ${@} ${expl[@]} ${need_suf:+-S"${sep}"} -q -d dirnames -- ${(q)dirs%"${sep}"}
+}
+
+(( $+functions[_arc__completer_18] )) ||
+_arc__completer_18() {
+  compadd ${@} ${expl[@]} -- "${(@f)$(${words_orig[@]} ---CUSTOM-COMPLETION--- LocalBranch "${current_orig}" "${prefix_orig}" "${suffix_orig}")}"
+}
+
+(( $+functions[_arc__completer_2] )) ||
+_arc__completer_2() {
+  compadd ${@} ${expl[@]} -- "${(@f)$(${words_orig[@]} ---CUSTOM-COMPLETION--- LocalBranch "${current_orig}" "${prefix_orig}" "${suffix_orig}")}"
+}
+
+(( $+functions[_arc__completer_1] )) ||
+_arc__completer_1() {
+  local expl action
+
+  _description 'alt-1' expl 'local branches'
+  _arc__completer_20 "${expl[@]}" 
+
+  _description 'alt-2' expl 'remote branches'
+  _arc__completer_21 "${expl[@]}" 
+}
+
+(( $+functions[_arc__completer_21] )) ||
+_arc__completer_21() {
+  local items=( "${(@f)$(${words_orig[@]} ---CUSTOM-COMPLETION--- RemoteBranch "${current_orig}" "${prefix_orig}" "${suffix_orig}")}" )
+
+  local rempat=${items[1]}
+  shift items
+
+  local sep=${items[1]}
+  shift items
+
+  local files=( ${items:#*"${sep}"} )
+  local filenames=( ${files#"${rempat}"} )
+  local dirs=( ${(M)items:#*"${sep}"} )
+  local dirnames=( ${dirs#"${rempat}"} )
+
+  local need_suf
+  compset -S "${sep}*" || need_suf="1"
+
+  compadd ${@} ${expl[@]} -d filenames -- ${(q)files}
+  compadd ${@} ${expl[@]} ${need_suf:+-S"${sep}"} -q -d dirnames -- ${(q)dirs%"${sep}"}
+}
+
+(( $+functions[_arc__completer_20] )) ||
+_arc__completer_20() {
   compadd ${@} ${expl[@]} -- "${(@f)$(${words_orig[@]} ---CUSTOM-COMPLETION--- LocalBranch "${current_orig}" "${prefix_orig}" "${suffix_orig}")}"
 }
 
