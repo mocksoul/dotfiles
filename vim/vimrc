@@ -8,7 +8,6 @@ let &runtimepath = '~/.config/vim' . ',' . &runtimepath
 " Basic options {{{
 filetype plugin indent on
 set nocompatible                 " git rid of awful vi-compat mode
-set autoindent
 set autoread
 set autowrite
 set backspace=indent,eol,start
@@ -36,6 +35,7 @@ set shiftround
 set showbreak=~
 set showcmd
 set showmode
+set signcolumn=number               " always show sign col
 set splitbelow
 set splitright
 set timeoutlen=1000
@@ -46,6 +46,8 @@ set undofile                     " persistent undo is better than backups!
 set undoreload=10000             " save undo then reloading file (so we can undo reload), only if <10000 chars
 set visualbell
 set viewoptions=cursor,folds
+set mouse=                       " disable mouse completely
+"set mousemodel=extend            " extend selection by right mouse
 " Make and set undo, backup and swap directories {{{
 let s:mdirs = ['~/.cache/vim/undo', '~/.cache/vim/backup', '~/.cache/vim/swap']
 for dir in s:mdirs
@@ -115,8 +117,8 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 set smarttab
-set wrap
-set textwidth=118
+set nowrap
+set textwidth=120
 set formatoptions=rqln
 set colorcolumn=+1
 set autoindent
@@ -146,8 +148,13 @@ endfunction
 command! -nargs=0 SudoWrite :call SudoWrite()
 "cnoremap w!! w !sudo tee % >/dev/null
 
+function! LessInitFunc()
+    set absd
+    set nowrap
+endfunction
+
 " Unfuck my screen
-nnoremap <leader>r :syntax sync fromstart<cr>:redraw!<cr>
+nnoremap <leader>rd :syntax sync fromstart<cr>:redraw!<cr>
 
 " Stop highlighting
 noremap <silent> <leader><space> :noh<cr>: call clearmatches()<cr>
@@ -167,7 +174,7 @@ imap <C-s> <C-o><C-s>
 " Window splitting
 noremap <C-x> :sp<cr>
 noremap <C-y> :vs<cr>
-noremap <silent> <C-q> :1split<cr><A-PageDown><C-w><Up>:bwipe<cr>
+"noremap <silent> <C-q> :1split<cr><A-PageDown><C-w><Up>:bwipe<cr> " ????
 imap <C-x> <C-o><C-x>
 imap <C-y> <C-o><C-y>
 map <A-PageDown> :bnext<CR>
@@ -221,22 +228,31 @@ set cmdheight=1                  " commandbar height
 set showmatch
 set matchtime=5
 set cursorline
-set fillchars=vert:\|,fold:\ 
+set fillchars="vert:\|,fold:\ "
 syntax on
 color gentooish
-highlight Normal ctermfg=249 ctermbg=none
-highlight LineNr term=None cterm=None ctermfg=DarkGray ctermbg=234 guibg=Gray
-highlight CursorLine term=None cterm=None ctermbg=232 guibg=Gray
-highlight CursorLineNr term=none cterm=none ctermfg=250 ctermbg=234
-highlight ColorColumn term=None cterm=none ctermbg=232 ctermfg=none guibg=LightRed
-highlight VertSplit cterm=NONE ctermbg=NONE ctermfg=gray
-highlight Folded ctermbg=none ctermfg=142
+highlight Normal                                ctermfg=249         ctermbg=none
+highlight LineNr        term=none   cterm=none  ctermfg=DarkGray    ctermbg=234    guibg=gray
+highlight CursorLine    term=none   cterm=none                      ctermbg=232    guibg=gray
+highlight CursorLineNr  term=none   cterm=none  ctermfg=250         ctermbg=234
+highlight ColorColumn   term=none   cterm=none  ctermfg=red         ctermbg=234    guibg=lightred
+highlight VertSplit                 cterm=none  ctermfg=black       ctermbg=none
+highlight Folded                                ctermfg=142         ctermbg=none
+highlight SignColumn                                                ctermbg=none
 
-if has('nvimx')
-    highlight ActiveWindow ctermbg=none
-    highlight InactiveWindow ctermbg=232
-    set winhighlight=Normal:ActiveWindow,NormalNC:InactiveWindow
-endif
+" asdka jsdlkjas kldj aslkdj aslkdj laksjd lkasjd lkasjd lkasj dlkajs dlkajs dlkjas ldkjas lkdj aslkjd laksuj dlkasj dlkjas ldkja slkdjasd
+
+highlight NvimTreeFolderName ctermfg=blue
+highlight NvimTreeOpenedFolderName ctermfg=blue
+highlight NvimTreeSymlink ctermfg=cyan
+highlight NvimTreeExecFile ctermfg=green
+highlight NvimTreeOpenedFile ctermfg=yellow
+
+" if has('nvim')
+"     highlight ActiveWindow ctermbg=none
+"     highlight InactiveWindow ctermbg=232
+"     set winhighlight=Normal:ActiveWindow,NormalNC:InactiveWindow
+" endif
 
 " Highlight VCS merge conflict markers
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
@@ -253,6 +269,8 @@ augroup fastescape
     au InsertEnter * set timeoutlen=0
     au InsertLeave * set timeoutlen=1000
 augroup END
+
+highlight ScrollView ctermbg=232
 " Color scheme }}}
 
 " Searching {{{
@@ -294,7 +312,7 @@ if has('unnamedplus')
     " if we can, use '+' register (X clipboard) by default
     set clipboard+=unnamedplus
 elseif has('unnamed')
-    " if we can, use '*' register (X primary selection) by default 
+    " if we can, use '*' register (X primary selection) by default
     set clipboard+=unnamed
 endif
 
@@ -315,6 +333,168 @@ noremap <Del> "_d
 " Plug installation {{{
 call plug#begin('~/.local/share/nvim/plugged')
 
+" newstyle plugs {{{
+Plug 'junegunn/fzf.vim'
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'j-hui/fidget.nvim'   " LSP progress bar botright
+Plug 'antoinemadec/FixCursorHold.nvim'
+let g:cursorhold_updatetime = 500
+Plug 'kosayoda/nvim-lightbulb'
+Plug 'weilbith/nvim-code-action-menu'
+Plug 'williamboman/mason.nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'm-demare/hlargs.nvim'
+Plug 'lewis6991/satellite.nvim'
+Plug 'nvim-lua/lsp-status.nvim'
+Plug 'folke/trouble.nvim'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'                       " complete from buffer words
+"Plug 'hrsh7th/cmp-nvim-lsp-signature-help'      " func signatures help
+Plug 'ray-x/lsp_signature.nvim'
+Plug 'hrsh7th/cmp-path'                         " complete for fs paths
+Plug 'hrsh7th/nvim-cmp'                         " main plugin
+Plug 'rafamadriz/friendly-snippets'
+Plug 'L3MON4D3/LuaSnip'
+Plug 'saadparwaiz1/cmp_luasnip'
+Plug 'simrat39/symbols-outline.nvim'
+Plug 'windwp/nvim-autopairs'
+Plug 'folke/lsp-colors.nvim'
+Plug 'nvim-lua/plenary.nvim'  " telescope dep
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'kyazdani42/nvim-tree.lua'
+Plug 'kylechui/nvim-surround'
+"Plug 'stevearc/qf_helper.nvim'
+Plug 'https://gitlab.com/yorickpeterse/nvim-pqf.git'
+"Plug 'kevinhwang91/nvim-bqf'
+"Plug 'onsails/diaglist.nvim'
+"Plug 'wiliamks/nice-reference.nvim'
+Plug 'lvimuser/lsp-inlayhints.nvim'
+
+" rust
+Plug 'simrat39/rust-tools.nvim'
+
+" }}}
+" * symbols outline (aka new tagbar) symbols outline{
+lua <<EOF
+vim.g.symbols_outline = {
+    highlight_hovered_item = true,
+    relative_width = false,
+    width = 40,
+    show_guides = false,
+    show_numbers = true,
+    show_symbol_detail = false,
+    auto_preview = false,
+    keymaps = {
+        close = {},
+    },
+    symbols = {
+        Method = {icon='m', hl='TSMethod'},
+        Function = {icon='f', hl='TSFunction'},
+        Struct = {icon='S', hl='TSType'},
+        Interface = {icon='I', hl='TSType'},
+        Field = {icon='-', hl='TSField'},
+    }
+}
+EOF
+hi FocusedSymbol ctermbg=black ctermfg=green
+
+autocmd Filetype Outline set nowrap
+
+" }}}
+" * nerd commenter {{{
+Plug 'preservim/nerdcommenter'
+let g:NERDCreateDefaultMappings = 1
+
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 0
+
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+
+" Set a language to use its alternate delimiters by default
+let g:NERDAltDelims_java = 1
+
+" Add your own custom formats or override the defaults
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+
+" Enable NERDCommenterToggle to check all selected lines is commented or not
+let g:NERDToggleCheckAllLines = 1
+
+nnoremap <silent> <F3> :call nerdcommenter#Comment('n', 'Toggle')<CR>
+inoremap <silent> <F3> <C-o>:call nerdcommenter#Comment('n', 'Toggle')<CR>
+vnoremap <silent> <F3> :call nerdcommenter#Comment('x', 'Toggle')<CR>
+
+autocmd FileType python let g:NERDSpaceDelims = 0
+" }}}
+" * python indent, python-syntax, semshi {{{
+Plug 'Vimjas/vim-python-pep8-indent'
+let g:python_pep8_indent_multiline_string = -2  " indent like regular, -1: use current ind
+let g:python_pep8_indent_hang_closing = 0       " do not hang closing brakets for lists, tuples, dicts, etc.
+
+Plug 'vim-python/python-syntax'
+let g:python_highlight_all = 1
+" let g:python_highlight_string_formatting = 0
+" let g:python_highlight_string_format = 0
+let g:python_highlight_file_headers_as_comments = 1
+let g:python_slow_sync = 1
+let g:python_highlight_indent_errors = 1
+let g:python_highlight_space_errors = 0
+let g:python_highlight_func_calls = 1
+
+Plug 'numirias/semshi'
+let g:semshi#mark_selected_nodes = 1
+let g:semshi#simplify_markup = v:false
+let g:semshi#always_update_all_highlights = v:true
+let g:semshi#excluded_hl_groups = []
+let g:semshi#no_default_builtin_highlight = v:true
+let g:semshi#self_to_attribute = v:true
+let g:semshi#error_sign = v:false
+
+augroup ft_python
+    au!
+    au FileType python noremap <silent> <Tab> :Semshi goto name next<CR>
+    au FileType python noremap <silent> <S-Tab> :Semshi goto name prev<CR>
+    au FileType python noremap <silent> <S-Right> :Semshi goto name next<CR>
+    au FileType python noremap <silent> <S-Left> :Semshi goto name prev<CR>
+    au FileType python noremap <silent> <S-Down> :Semshi goto function next<CR>
+    au FileType python noremap <silent> <S-Up> :Semshi goto function prev<CR>
+augroup END
+
+function TuneSemshiHL()
+    hi SemshiSelected   ctermfg=none ctermbg=236
+    hi SemshiAttribute  ctermfg=37
+    hi SemshiSelf       ctermfg=31
+    "hi SemshiSelf       ctermfg=246
+    hi SemshiUnresolved ctermfg=227 cterm=none
+    hi SemshiFree       ctermfg=38 cterm=underline
+    hi SemshiLocal      ctermfg=74
+    hi SemshiGlobal     ctermfg=38
+    hi SemshiImported   ctermfg=214 cterm=none
+    hi SemshiBuiltin    ctermfg=38
+    hi Error            ctermbg=none
+endfunction
+
+function Rename()
+    :Semshi rename
+endfunction
+
+noremap <silent> <leader>re :Semshi rename<CR>
+
+autocmd FileType python call TuneSemshiHL()
+" }}}
+" * nvim-lspconfig {{{
+Plug 'neovim/nvim-lspconfig'
+" }}}
 " * vimwiki {{{
 Plug 'vimwiki/vimwiki'
 nmap <Leader>wtl <Plug>VimwikiTableMoveColumnLeft
@@ -331,14 +511,14 @@ let g:vimwiki_list = [{
 \}]
 au FileType vimwiki set shiftwidth=2 tabstop=2 softtabstop=2
 " }}}
-" * taskwiki {{{
-Plug 'tbabej/taskwiki'
-Plug 'powerman/vim-plugin-AnsiEsc'
-Plug 'blindFS/vim-taskwarrior'
-let g:taskwiki_maplocalleader="t"
-let g:taskwiki_disable_concealcursor="yes"
-let g:taskwiki_source_tw_colors=""
-let g:taskwiki_dont_preserve_folds="yes"
+" - taskwiki {{{
+"Plug 'tbabej/taskwiki'
+"Plug 'powerman/vim-plugin-AnsiEsc'
+"Plug 'blindFS/vim-taskwarrior'
+"let g:taskwiki_maplocalleader="t"
+"let g:taskwiki_disable_concealcursor="yes"
+"let g:taskwiki_source_tw_colors=""
+"let g:taskwiki_dont_preserve_folds="yes"
 " }}}
 " * vim-session {{{
 Plug 'xolox/vim-misc'
@@ -352,24 +532,24 @@ let g:session_autoload = 0
 let g:session_autosave = 0
 " call add(g:session_persist_globals, 'g:syntastic_python_checker_prog')
 " }}}
-" * vim-diminactive {{{
-Plug 'blueyed/vim-diminactive'
-let g:diminactive_use_colorcolumn = 1
-let g:diminactive_use_syntax = 0
-let g:diminactive_enable_focus = 1
-" }}}
+" " * vim-diminactive {{{
+" Plug 'blueyed/vim-diminactive'
+" let g:diminactive_use_colorcolumn = 1
+" let g:diminactive_use_syntax = 0
+" let g:diminactive_enable_focus = 1
+" " }}}
 " * vim-airline {{{
-Plug 'vim-airline/vim-airline'
-set noshowmode  " not needed anymore
-let g:airline_powerline_fonts = 0
-let g:airline_symbols_ascii = 1
-let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-let g:airline#extensions#keymap#enabled = 0
-let g:airline_detect_spell = 0
-let g:airline_detect_spelllang = 0
-"let g:airline_section_a = '(mode)'
-"let g:airline_section_a = '%#__accent_bold#%{airline#util#wrap(airline#parts#mode(),0)}%#__restore__#%{airline#util#append(airline#parts#crypt(),0)}%{airline#util#append(airline#parts#paste(),0)}%{airline#util#append("",0)}%{airline#util#append(airline#parts#spell(),0)}%{airline#util#append("",0)}%{airline#util#append(airline#extensions#xkblayout#status(),0)}%{airline#util#append(airline#parts#iminsert(),0)}'
-" }}}
+"Plug 'vim-airline/vim-airline'
+"set noshowmode  " not needed anymore
+"let g:airline_powerline_fonts = 0
+"let g:airline_symbols_ascii = 0
+"let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+"let g:airline#extensions#keymap#enabled = 0
+"let g:airline_detect_spell = 0
+"let g:airline_detect_spelllang = 0
+""let g:airline_section_a = '(mode)'
+""let g:airline_section_a = '%#__accent_bold#%{airline#util#wrap(airline#parts#mode(),0)}%#__restore__#%{airline#util#append(airline#parts#crypt(),0)}%{airline#util#append(airline#parts#paste(),0)}%{airline#util#append("",0)}%{airline#util#append(airline#parts#spell(),0)}%{airline#util#append("",0)}%{airline#util#append(airline#extensions#xkblayout#status(),0)}%{airline#util#append(airline#parts#iminsert(),0)}'
+"" }}}
 " * bufexplorer {{{
 Plug 'jlanzarotta/bufexplorer'
 let g:bufExplorerShowRelativePath = 1
@@ -378,9 +558,13 @@ let g:bufExplorerSplitOutPathName = 0
 let g:bufExplorerFindActive = 0
 noremap <F1> :BufExplorer<cr>
 imap <F1> <c-o><F1>
+nnoremap <S-F1> <cmd>CodeActionMenu<CR>
+inoremap <S-F1> <cmd>CodeActionMenu<CR>
+
 " }}}
 " * syntastic {{{
 Plug 'vim-syntastic/syntastic'
+"let g:syntastic_quiet_messages = {"regex": 'unlambdaxxx' }
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_aggregate_errors = 1  " aggregate errors from all checkers
@@ -392,20 +576,35 @@ let g:syntastic_enable_ballons = 0
 let g:syntastic_python_checkers = ['flake8', 'python']  " off: py3kwarn pylama pep257 pep8
 let g:syntastic_python_python_exec = 'python3'
 let g:syntastic_python_flake8_exec = 'flake8'
+"let g:syntastic_go_checkers = ['golangci_lint']
+"let g:syntastic_go_golangci_lint_fname = shellescape(expand('%:h:p', 1))
+""let g:syntastic_go_golangci_lint_fname = '.'
+"let g:syntastic_go_golangci_lint_args = "--max-issues-per-linter=0 --max-same-issues=0"
+"let g:syntastic_c_include_dirs = ['/home/mocksoul/.platformio/packages/framework-arduinoespressif32/cores/esp32']
+let g:syntastic_cpp_include_dirs = ['/home/mocksoul/.platformio/packages/framework-arduinoespressif32/cores/esp32']
 highlight Error term=reverse ctermfg=White ctermbg=124 guifg=White guibg=Red
 highlight SpellBad term=reverse cterm=bold ctermfg=White ctermbg=88 gui=undercurl guisp=Red
 highlight SpellCap term=reverse cterm=undercurl ctermfg=White ctermbg=88 gui=undercurl guisp=Red
-" }}}
 
+" F4 to open Shift-F4 to close
+nnoremap <silent> <F4> :TroubleToggle workspace_diagnostics<CR><C-w>=<CR>
+inoremap <silent> <F4> <C-o>:TroubleToggle workspace_diagnostics<CR><C-o><C-w>=<CR>
+vnoremap <silent> <F4> :TroubleToggle workspace_diagnostics<CR><C-w>=<CR>
+"nnoremap <silent> <F4> :Errors<CR><cmd>lua if vim.diagnostic.get(0) ~= nil then vim.diagnostic.setloclist() end<CR>
+"inoremap <silent> <F4> <C-o>:Errors<CR>
+"vnoremap <silent> <F4> :Errors<CR>
+nnoremap <silent> <S-F4> :lclose<CR>:cclose<CR>
+inoremap <silent> <S-F4> <C-o>:lclose<CR><C-o>:cclose<CR>
+vnoremap <silent> <S-F4> :lclose<CR>:cclose<CR>
+" }}}
 " * pudb.vim {{{
 "Plug 'SkyLeach/pudb.vim'
 Plug 'KangOl/vim-pudb'
-nnoremap <F8> :TogglePudbBreakPoint<CR>
-inoremap <F8> <ESC>:TogglePudbBreakPoint<CR>a
+autocmd filetype python nnoremap <F8> :TogglePudbBreakPoint<CR>
+autocmd filetype python inoremap <F8> <ESC>:TogglePudbBreakPoint<CR>a
 " }}}
-
-" * vim-addon-local-vimrc {{{
-Plug 'MarcWeber/vim-addon-local-vimrc'
+" * klen/nvim-config-local {{{
+Plug 'klen/nvim-config-local'
 " }}}
 " * gundo {{{
 Plug 'sjl/gundo.vim'
@@ -417,8 +616,8 @@ Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 let g:NERDChristmasTree = 1
 let g:NERDTreeDirArrows = 0
-let g:NERDTreeShowIgnoredStatus = 1 " can have huge performance cost
-let g:NERDTreeIndicatorMapCustom = {
+let g:NERDTreeGitStatusShowIgnored = 1 " can have huge performance cost
+let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ "Modified"  : "mod",
     \ "Staged"    : "stg",
     \ "Untracked" : "unt",
@@ -432,7 +631,9 @@ let g:NERDTreeIndicatorMapCustom = {
     \ }
 let g:NERDTreeDirArrowExpandable = '+'
 let g:NERDTreeDirArrowCollapsible = '-'
-noremap <F2> :NERDTreeToggle<cr>
+"noremap <F2> :NERDTreeToggle<cr>
+noremap <F2> :NvimTreeToggle<CR>
+
 imap <F2> <c-o><F2>
 " }}}
 " * TagBar {{{
@@ -447,10 +648,41 @@ let g:tagbar_autoshowtag = 0
 let g:tagbar_iconchars = ['+', '-']
 let g:tagbar_left = 0
 
-map <F9> :TagbarOpen -fj<cr>
-map <S-F9> :TagbarClose<cr>
+fun! ActivateWindow(name)
+    let l:bufid = bufnr(a:name)
+    let l:winids = win_findbuf(l:bufid)
+    if len(l:winids) > 0
+        " return l:winids[0]
+        call win_gotoid(l:winids[0])
+    endif
+    return -1
+endfun
+
+fun! OutlineWin()
+    let l:cwin = win_findbuf(bufnr())[0]
+    let l:outwin = ActivateWindow('OUTLINE')
+
+    :SymbolsOutlineOpen
+
+    " call win_gotoid(l:outwin)
+
+    " if l:outwin != -1
+    "     " echo l:outwin
+    "     " call win_gotoid(l:outwin)
+    " else
+    "     call win_gotoid(l:cwin)
+    " endif
+endfun
+
+"map <F9> :TagbarOpen -fj<cr>
+"map <S-F9> :TagbarClose<cr>
+map <F9> :SymbolsOutlineOpen<CR><CMD>call ActivateWindow('OUTLINE')<CR>
+"map <F9> <CMD>call OutlineWin()<CR>
+map <S-F9> :SymbolsOutlineClose<CR><C-w>=<CR>
 imap <F9> <C-o><F9><Esc>
 imap <S-F9> <C-o><S-F9>
+
+map == <C-w>=<CR>
 " }}}
 " * terminus {{{
 Plug 'wincent/terminus'
@@ -458,8 +690,81 @@ Plug 'wincent/terminus'
 " * wakatime {{{
 Plug 'wakatime/vim-wakatime'
 " }}}
+" * vim-go {{{
+"Plug 'fatih/vim-go'
+
+""let g:go_fmt_command = 'goimports'
+"let g:go_fmt_command = 'yoimports'
+""let g:go_fmt_command = 'gopls'
+"let g:go_fmt_fail_silently = 1
+"
+"let g:go_fmt_autosave = 1
+"let g:go_imports_autosave = 0
+"
+"let g:go_highlight_types = 1
+"let g:go_highlight_fields = 1
+"let g:go_highlight_functions = 1
+"let g:go_highlight_function_calls = 1
+"let g:go_highlight_function_parameters = 1
+"let g:go_highlight_operators = 1
+"let g:go_highlight_extra_types = 1
+"let g:go_highlight_build_constraints = 1
+"let g:go_highlight_array_whitespace_error = 1
+"let g:go_highlight_chan_whitespace_error = 1
+"let g:go_highlight_space_tab_error = 1
+"let g:go_highlight_trailing_whitespace_error = 1
+"let g:go_highlight_generate_tags = 1
+"let g:go_highlight_string_spellcheck = 1
+"let g:go_highlight_format_strings = 1
+"let g:go_highlight_variable_declarations = 1
+"let g:go_highlight_variable_assignments = 1
+"let g:go_highlight_diagnostic_errors = 1
+"let g:go_highlight_diagnostic_warnings = 1
+"
+"let g:go_metalinter_autosave = 0
+"let g:go_metalinter_command = 'golangci-lint'
+""let g:go_metalinter_command = 'go vet -vettool /home/mocksoul/.local/bin/yolint'
+"" disabled: revive
+"let g:go_metalinter_enabled = ['deadcode', 'errcheck', 'gosimple', 'govet', 'ineffassign', 'staticcheck', 'typecheck', 'unused', 'varcheck', 'revive']
+""let g:go_metalinter_enabled = ['deadcode', 'errcheck', 'gosimple', 'govet', 'ineffassign', 'staticcheck', 'typecheck', 'unused', 'varcheck']
+""let g:go_metalinter_enabled = ['staticcheck']
+""let g:go_metalinter_autosave_enabled = ['deadcode', 'errcheck', 'gosimple', 'govet', 'ineffassign', 'staticcheck', 'typecheck', 'unused', 'varcheck']
+"let g:go_metalinter_autosave_enabled = g:go_metalinter_enabled
+"
+"let g:go_highlight_debug = 0
+"let g:go_debug_log_output = 'debugger'
+"let g:go_debug_address = '127.0.0.1:8181'
+"let g:go_debug_windows = {
+"            \ 'vars': 'rightbelow 60vnew',
+"            \ 'stack': 'botright 20new',
+"            \ 'goroutines': 'botright 10new',
+"            \ }
+"            " \ 'out': 'botright 5new'
+"let g:go_debug_substitute_paths = [['/home/mocksoul/workspace/noc/arc/arcadia/', '/home/mocksoul/workspace/arcnoc/arcadia/']]
+""let g:go_debug = ['shell-commands', 'lsp']
+"let g:go_gopls_enabled = v:false
+"let g:go_gopls_local = 'a.yandex-team.ru'
+"
+""let g:go_gopls_settings = { 'directoryFilters': [ '-', '+/home/mocksoul/golib', '-library', '+library/go' ], 'expandWorkspaceToModule': v:false }
+""let g:go_gopls_settings = { 'directoryFilters': [ '-', '+/home/mocksoul/golib', '-library', '-library/go' ], 'expandWorkspaceToModule': v:false }
+"let g:go_gopls_settings = {
+"            \ 'directoryFilters': [ '-', '+library/go' ],
+"            \ 'build.importCacheFilters' : [ '-', '+vendor', '+library/go', '+junk/mocksoul' ],
+"            \ 'expandWorkspaceToModule': v:false
+"            \ }
+"
+"let g:go_list_type_commands = {
+"            \ 'GoMetaLinter': 'locationlist',
+"            \ 'GoMetaLinterAutoSave': 'locationlist'
+"            \ }
+
+" }}}
 
 call plug#end() " }}}
+
+" TreeSitter config
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
 
 " Tune specific file types {{{
 " ReST {{{
@@ -469,11 +774,21 @@ augroup ft_rest
 augroup END
 " ReST }}}
 
-" Go {{{
+" Go (golang) {{{
+fun! GoFumpt()
+    :silent !gofumpt -w %
+    :edit
+endfun
+
 augroup ft_go
     au!
     au FileType go set tabstop=4 shiftwidth=4 noexpandtab
+    au FileType go noremap <C-s> :wa<CR>
+    autocmd BufWritePre *.go lua GoOrgImports(1000)
+    "autocmd BufWritePost *.go call GoFumpt()
+    autocmd BufWritePre *.go lua vim.lsp.buf.format()
 augroup END
+
 " Go }}}
 
 " All {{
@@ -511,6 +826,34 @@ augroup vimrcAutoView
     autocmd BufWritePost,BufLeave,WinLeave ?* if MakeViewCheck() | mkview | endif
     autocmd BufWinEnter ?* if MakeViewCheck() | silent! loadview | endif
 augroup end
+augroup vimrcUnfuckSyntaxOnSave
+    autocmd!
+    autocmd BufWritePost ?* :syntax sync fromstart
+augroup end
+
+autocmd BufEnter Trouble :stopinsert
+
+augroup vimrcYaml
+    " autocmd FileType yaml setl indentkeys-=<:>
+    autocmd!
+    " autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=0# indentkeys-=<:>
+    autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab indentkeys-=0#
+augroup end
+
+au FileType php set sw=4 ts=4 sts=4 noet smarttab autoindent
+
+""" SmartHome (to first char in line)
+" function ExtendedHome()
+"     let column = col('.')
+"     normal! ^
+"     " if column == col('.')
+"     "     normal! 0
+"     " endif
+" endfunction
+" noremap <silent> <Home> :call ExtendedHome()<CR>
+" inoremap <silent> <Home> <C-O>:call ExtendedHome()<CR>
+noremap <silent> <Home> ^
+inoremap <silent> <Home> <C-o>^
 
 " Tune specific file types }}}
 
@@ -529,3 +872,7 @@ endif
 " backspace conf
 " XXX: WTF is this
 set whichwrap+=<,>,[,],h,l
+
+lua require('main') -- from .config/vim/lua/main.lua
+
+hi LspInlayHint ctermfg=238
