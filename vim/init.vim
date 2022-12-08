@@ -207,7 +207,7 @@ EOF
 " y/\V<C-R>"<CR>
 
 " Stop highlighting
-noremap <silent> <leader><space> :noh<cr>:call clearmatches()<cr>
+noremap <silent> <leader><space> :noh<cr>:call clearmatches()<cr>:let @/='(search' . ' exhausted)'<cr>
 
 " Search always in the middle of screen
 cnoremap <expr> <CR> getcmdtype() =~ '[/?]' ? '<CR>zvzz' : '<CR>'
