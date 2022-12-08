@@ -25,7 +25,8 @@ env:
   #
   # mcsl use simple screen terminfo
   #TERM: tmux-256color  # sane, but not works on freebsd, etc.
-  TERM: xterm-256color
+  #TERM: xterm-256color
+  TERM: alacritty
   ALACRITTY: '1'
 
 window:
@@ -398,7 +399,7 @@ selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
 
   # When set to `true`, selected text will be copied to the primary clipboard.
-  save_to_clipboard: true
+  save_to_clipboard: false
 
 cursor:
   # Cursor style
@@ -791,9 +792,24 @@ key_bindings:
   - { key: Space,      mods: Shift|Control, action: None }
 
   # Enter Vi mode on shift-pageup/dn
-  - { key: PageUp,     mods: Shift,   mode: ~Vi|~Search,     action: ToggleViMode             }
-  - { key: PageUp,     mods: Shift,   mode: ~Vi|~Search,     action: ScrollHalfPageUp         }
-  - { key: PageDown,   mods: Shift,   mode: ~Vi|~Search,     action: ToggleViMode             }
+  - { key: PageUp,     mods: Shift,   mode: ~Vi|~Search,        action: ToggleViMode            }
+  #- { key: PageUp,     mods: Shift,   mode: ~Vi|~Search,        action: ScrollHalfPageUp         }
+  - { key: PageUp,     mods: Shift,   mode: ~Vi|~Search,        action: ScrollLineUp            }
+  - { key: PageUp,     mods: Shift,   mode: ~Vi|~Search,        action: ScrollLineUp            }
+  - { key: PageUp,     mods: Shift,   mode: ~Vi|~Search,        action: ScrollLineUp            }
+  - { key: PageUp,     mods: Shift,   mode: ~Vi|~Search,        action: ScrollLineUp            }
+  - { key: PageUp,     mods: Shift,   mode: ~Vi|~Search,        action: ScrollLineUp            }
+  - { key: PageUp,     mods: Shift,   mode: ~Vi|~Search,        action: ScrollLineUp            }
+  - { key: PageUp,     mods: Shift,   mode: ~Vi|~Search,        action: ScrollLineUp            }
+  - { key: PageUp,     mods: Shift,   mode: ~Vi|~Search,        action: ScrollLineUp            }
+  - { key: PageUp,     mods: Shift,   mode: ~Vi|~Search,        action: ScrollLineUp            }
+  - { key: PageUp,     mods: Shift,   mode: ~Vi|~Search,        action: ScrollLineUp            }
+  - { key: PageUp,     mods: Shift,   mode: ~Vi|~Search,        action: ScrollLineUp            }
+  - { key: PageUp,     mods: Shift,   mode: ~Vi|~Search,        action: ScrollLineUp            }
+  - { key: PageUp,     mods: Shift,   mode: ~Vi|~Search,        action: ScrollLineUp            }
+  - { key: PageUp,     mods: Shift,   mode: ~Vi|~Search,        action: ScrollLineUp            }
+  - { key: PageUp,     mods: Shift,   mode: ~Vi|~Search,        action: ScrollLineUp            }
+  - { key: PageDown,   mods: Shift,   mode: ~Vi|~Search,        action: ToggleViMode            }
 
   # Vi
   - { key: Space,                           mode: Vi|~Search,   action: ToggleNormalSelection   }
@@ -804,12 +820,76 @@ key_bindings:
   - { key: Return,                          mode: Vi|~Search,   action: ClearSelection          }
   - { key: Return,                          mode: Vi|~Search,   action: ScrollToBottom          }
   - { key: Return,                          mode: Vi|~Search,   action: ToggleViMode            }
-  - { key: PageUp,                          mode: Vi|~Search,   action: ScrollHalfPageUp        }
-  - { key: PageDown,                        mode: Vi|~Search,   action: ScrollHalfPageDown      }
-  - { key: PageUp,     mods: Shift,         mode: Vi|~Search,   action: ScrollHalfPageUp        }
-  - { key: PageDown,   mods: Shift,         mode: Vi|~Search,   action: ScrollHalfPageDown      }
+
+  # Vi PageScrolling
+  #- { key: PageUp,                          mode: Vi|~Search,   action: ScrollHalfPageUp        }
+  - { key: PageUp,                          mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,                          mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,                          mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,                          mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,                          mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,                          mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,                          mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,                          mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,                          mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,                          mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,                          mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,                          mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,                          mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,                          mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,                          mode: Vi|~Search,   action: ScrollLineUp            }
+  #- { key: PageDown,                        mode: Vi|~Search,   action: ScrollHalfPageDown      }
+  - { key: PageDown,                        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,                        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,                        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,                        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,                        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,                        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,                        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,                        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,                        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,                        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,                        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,                        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,                        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,                        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,                        mode: Vi|~Search,   action: ScrollLineDown          }
+  #- { key: PageUp,     mods: Shift,         mode: Vi|~Search,   action: ScrollHalfPageUp        }
+  - { key: PageUp,      mods: Shift,        mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,      mods: Shift,        mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,      mods: Shift,        mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,      mods: Shift,        mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,      mods: Shift,        mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,      mods: Shift,        mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,      mods: Shift,        mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,      mods: Shift,        mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,      mods: Shift,        mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,      mods: Shift,        mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,      mods: Shift,        mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,      mods: Shift,        mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,      mods: Shift,        mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,      mods: Shift,        mode: Vi|~Search,   action: ScrollLineUp            }
+  - { key: PageUp,      mods: Shift,        mode: Vi|~Search,   action: ScrollLineUp            }
+  #- { key: PageDown,                        mode: Vi|~Search,   action: ScrollHalfPageDown      }
+  - { key: PageDown,    mods: Shift,        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,    mods: Shift,        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,    mods: Shift,        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,    mods: Shift,        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,    mods: Shift,        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,    mods: Shift,        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,    mods: Shift,        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,    mods: Shift,        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,    mods: Shift,        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,    mods: Shift,        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,    mods: Shift,        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,    mods: Shift,        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,    mods: Shift,        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,    mods: Shift,        mode: Vi|~Search,   action: ScrollLineDown          }
+  - { key: PageDown,    mods: Shift,        mode: Vi|~Search,   action: ScrollLineDown          }
+  #- { key: PageDown,   mods: Shift,         mode: Vi|~Search,   action: ScrollHalfPageDown      }
   - { key: PageUp,     mods: Control,       mode: Vi|~Search,   action: ScrollPageUp            }
   - { key: PageDown,   mods: Control,       mode: Vi|~Search,   action: ScrollPageDown          }
+
   - { key: Up,         mods: Control,       mode: Vi|~Search,   action: ScrollLineUp            }
   - { key: Down,       mods: Control,       mode: Vi|~Search,   action: ScrollLineDown          }
   - { key: Up,         mods: Shift|Control, mode: Vi|~Search,   action: ScrollPageUp            }
@@ -825,7 +905,15 @@ key_bindings:
   - { key: Slash,      mods: Control,       mode: Vi|~Search,   action: SearchForward           }
   - { key: LBracket,                        mode: Vi|~Search,   action: Bracket                 }
   - { key: RBracket,                        mode: Vi|~Search,   action: Bracket                 }
-  - { key: O,          mods: Control,       mode: Vi|~Search,   action: Open                    }
+  - { key: O,                               mode: Vi|~Search,   action: Open                    }
+  - { key: Home,                            mode: Vi|~Search,   action: FirstOccupied           }
+  - { key: Home,       mods: Shift,         mode: Vi|~Search,   action: First                   }
+  - { key: End,                             mode: Vi|~Search,   action: Last                    }
+  - { key: End,        mods: Shift,         mode: Vi|~Search,   action: Last                    }
+  - { key: Key4,                            mode: Vi|~Search,   action: Last                    }
+  - { key: Key6,                            mode: Vi|~Search,   action: FirstOccupied           }
+  - { key: G,                               mode: Vi|~Search,   action: ScrollToTop             }
+  - { key: G,                               mode: Vi|~Search,   action: Low                     }
 
   # Search
 
