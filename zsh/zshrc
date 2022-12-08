@@ -225,3 +225,32 @@ alias lg='lazygit'
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 
 alias pager='eval $PAGER'
+
+function syncvim() {
+    if [ ! "$1" = "" ]; then
+        hosts=($@)
+    else
+        hosts=(home nas nas2 nas3 nas421 nas361 nas362)
+    fi
+
+    for h in $hosts; do
+        echo "syncing $h..."
+        ssh $h 'rm -rf .vimrc .config/vim .config/nvim .local/share/nvim /usr/local/share/nvimpager && mkdir -p .config/nvim /usr/local/share' && \
+            rsync -a --delete .config/nvim/. $h:.config/nvim/ && \
+            rsync -a --delete .local/share/nvim $h:.local/share/ && \
+            rsync -a /usr/local/share/nvimpager $h:/usr/local/share/ && \
+            rsync -a /usr/local/bin/nvimpager $h:/usr/local/bin/nvimpager && \
+            ssh $h "ln -snf ~/.config/nvim/init.vim ~/.vimrc" &&
+            ssh $h "sed -i -s '/Plug.*waka/d' ~/.config/nvim/init.vim";
+    done
+}
+
+function syncfile() {
+    fn="$1"
+    fn=$(realpath "$fn")
+
+    for h in home nas nas2 nas3 nas421 nas361 nas362; do
+        echo -n "$h: $fn:  "
+        rsync -a "$1" $h:$1 && echo OK
+    done
+}
