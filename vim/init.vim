@@ -12,14 +12,12 @@ set autoread
 set autowrite
 set backspace=indent,eol,start
 set encoding=utf-8
-set foldlevelstart=99
-set foldmethod=marker
 set hidden                       " allow buffers to have changes and be hidden
-set history=1000
+set history=10000
 set laststatus=2
 set linebreak
 set list
-set listchars=tab:»\ ,trail:·,nbsp:.,extends:#,precedes:#
+set listchars=tab:»\ ,trail:·,nbsp:·,extends:#,precedes:#
 set matchtime=3
 set modeline
 set modelines=3
@@ -35,7 +33,8 @@ set shiftround
 set showbreak=~
 set showcmd
 set showmode
-set signcolumn=number               " always show sign col
+set signcolumn=number            " always show sign col
+set foldcolumn=auto:3            " up to 3 folds
 set splitbelow
 set splitright
 set timeoutlen=1000
@@ -60,6 +59,13 @@ exec 'set backupdir=' . s:mdirs[1]
 exec 'set directory=' . s:mdirs[2]
 " Make and set undo, backup and swap directories }}}
 
+" ! - store global vars
+" ' - maxnumber of previously edited files
+" < - max lines saved in each register
+" f - how much marks to save for each file (marks 0-9 and A-Z)
+" s - elims more than this in kb not saved
+" h - disable effect of hlsearch upon loading
+set shada=!,'500,<100,f0,s10,h
 set complete=.,w,b,u,t
 set completeopt=longest,menuone,preview
 
@@ -133,6 +139,7 @@ set virtualedit=block,onemore       " allow to past EOL in Visual block mode
 let mapleader = "\\"
 let maplocalleader = "`"
 
+
 " Sort lines
 nnoremap <leader>s vip:!sort<cr>
 vnoremap <leader>s :!sort<cr>
@@ -148,20 +155,56 @@ endfunction
 command! -nargs=0 SudoWrite :call SudoWrite()
 "cnoremap w!! w !sudo tee % >/dev/null
 
-function! LessInitFunc()
-    set absd
-    set nowrap
-endfunction
-
 " Unfuck my screen
 nnoremap <leader>rd :syntax sync fromstart<cr>:redraw!<cr>
 
+" Dont search whole word instantly
+"xnoremap # y?\V<C-R>"<CR>
+"nnoremap <silent> # :let @/ = '\<' . expand('<cword>') . '\>' <bar> set hls <cr>:call histadd('/', @/)<cr>wb
+
+lua <<EOF
+function smartqsearch()
+    local search = '\\<' .. vim.fn.expand('<cword>') .. '\\>'
+    if vim.fn.getreg('/') ~= search then
+        vim.fn.setreg('/', search)
+        vim.api.nvim_call_function('histadd', { '/', search })
+        local ret = vim.api.nvim_call_function('winsaveview', {})
+        local cnt = vim.api.nvim_call_function('searchcount', { { recompute = 1 } }).total
+
+        if cnt > 1 then
+            vim.cmd('normal nN')
+        else
+            vim.cmd('normal n')
+        end
+
+        ret.col = nil
+        vim.api.nvim_call_function('winrestview', { ret })
+    else
+        local cnt = vim.api.nvim_call_function('searchcount', { { recompute = 1 } }).total
+        -- if we are already on search word -- center it on screen
+        if cnt > 1 then
+            vim.cmd('normal nN')
+        else
+            vim.cmd('normal n')
+        end
+    end
+
+    vim.opt.hlsearch = true
+    vim.api.nvim_call_function('HighlightMatchUnderCursor#matchadd', {})
+end
+vim.keymap.set('n', '#', smartqsearch, { noremap = true, silent = true })
+EOF
+
+" y?\V<C-R>"<CR>
+" y/\V<C-R>"<CR>
+
 " Stop highlighting
-noremap <silent> <leader><space> :noh<cr>: call clearmatches()<cr>
+noremap <silent> <leader><space> :noh<cr>:call clearmatches()<cr>
 
 " Search always in the middle of screen
-noremap n nzzzv
-noremap N Nzzzv
+cnoremap <expr> <CR> getcmdtype() =~ '[/?]' ? '<CR>zvzz' : '<CR>'
+noremap n nzvzz
+noremap N Nzvzz
 
 " < or > will let you indent/dedent selected lines
 vnoremap < <gv
@@ -171,52 +214,78 @@ vnoremap > >gv
 noremap <C-s> :w<CR>
 imap <C-s> <C-o><C-s>
 
+" big Q to macros
+map      q      <nop>
+noremap  Q      q
+
+" Q to quit
+map      <C-q>  :q<CR>
+map      <A-q>  :qa<CR>
+imap     <C-q>  <C-o><C-q>
+imap     <A-q>  <C-o><A-q>
+
 " Window splitting
-noremap <C-x> :sp<cr>
-noremap <C-y> :vs<cr>
-"noremap <silent> <C-q> :1split<cr><A-PageDown><C-w><Up>:bwipe<cr> " ????
-imap <C-x> <C-o><C-x>
-imap <C-y> <C-o><C-y>
-map <A-PageDown> :bnext<CR>
-map <A-PageUp> :bprev<CR>
-map <A-Left> <C-w><Left>
-map <A-Right> <C-w><Right>
-map <A-Down> <C-w><Down>
-map <A-Up> <C-w><Up>
-imap <A-PageDown> <C-o><A-PageDown>
-imap <A-PageUp> <C-o><A-PageUp>
-imap <A-Left> <C-o><A-Left>
-imap <A-Right> <C-o><A-Right>
-imap <A-Down> <C-o><A-Down>
-imap <A-Up> <C-o><A-Up>
+noremap  <C-x>         :sp<cr>
+noremap  <C-y>         :vs<cr>
+imap     <C-x>         <C-o><C-x>
+imap     <C-y>         <C-o><C-y>
+map      <A-PageDown>  :bnext<CR>
+map      <A-PageUp>    :bprev<CR>
+map      <A-Left>      <C-w><Left>
+map      <A-Right>     <C-w><Right>
+map      <A-Down>      <C-w><Down>
+map      <A-Up>        <C-w><Up>
+imap     <A-PageDown>  <C-o><A-PageDown>
+imap     <A-PageUp>    <C-o><A-PageUp>
+imap     <A-Left>      <C-o><A-Left>
+imap     <A-Right>     <C-o><A-Right>
+imap     <A-Down>      <C-o><A-Down>
+imap     <A-Up>        <C-o><A-Up>
 
 " Scroll up/down by 4 line using Ctrl-Up/Down (Ctrl-Shift-Up/Down)
-noremap <silent> <C-S-A-Up> <C-y>
-noremap <silent> <C-S-Up> 3<C-y>
-map <silent> <C-Up> <C-S-Up>3<Up>
-inoremap <silent> <C-S-Up> <C-o>3<C-y>
-imap <silent> <C-Up> <C-S-Up><C-o>3<Up>
 
-noremap <silent> <C-S-A-Down> <C-e>
-noremap <silent> <C-S-Down> 3<C-e>
-map <silent> <C-Down> <C-S-Down>3<Down>
-inoremap <silent> <C-S-Down> <C-o>3<C-e>
-imap <silent> <C-Down> <C-S-Down><C-o>3<Down>
 
-noremap <Backspace> <Nop>
-noremap <Enter> <Nop>
-noremap <Space> <Nop>
+"map      mod           key                     mapping
+noremap   <silent>  <C-S-A-Up>    <C-y>
+noremap   <silent>  <C-S-Up>      3<C-y>
+map       <silent>  <C-Up>        <C-S-Up>3<Up>
+inoremap  <silent>  <C-S-Up>      <C-o>3<C-y>
+imap      <silent>  <C-Up>        <C-S-Up><C-o>3<Up>
+noremap   <silent>  <C-S-A-Down>  <C-e>
+noremap   <silent>  <C-S-Down>    3<C-e>
+map       <silent>  <C-Down>      <C-S-Down>3<Down>
+inoremap  <silent>  <C-S-Down>    <C-o>3<C-e>
+imap      <silent>  <C-Down>      <C-S-Down><C-o>3<Down>
+noremap             <Backspace>   <Nop>
+noremap             <Enter>       <Nop>
+noremap             <Space>       <Nop>
+
 au FileType qf noremap <buffer> <Enter> <Enter>
+
 
 " Make vim to scroll by visible lines, not by physical (while wrapping)
 noremap j gj
 noremap k gk
 
 " Page up/dn half of page instead of full
-noremap <PageUp> <C-u>
-noremap <PageDown> <C-d>
+noremap <PageUp> 15<C-u>
+noremap <PageDown> 15<C-d>
 imap <PageUp> <c-o><PageUp>
 imap <PageDown> <c-o><PageDown>
+
+" SuperTab
+lua <<EOF
+function supertab()
+    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+    local pline = vim.api.nvim_buf_get_lines(0, row - 2, row - 1, true)[1]
+
+    -- if pline:len() > col then
+    --     leading =
+    print(pline:len())
+    return ''
+end
+vim.keymap.set({ 'i' }, '<S-Tab>', supertab, { expr = true })
+EOF
 " Leader keys and other mappings }}}
 
 " Color scheme and appearence{{{
@@ -228,25 +297,46 @@ set cmdheight=1                  " commandbar height
 set showmatch
 set matchtime=5
 set cursorline
-set fillchars="vert:\|,fold:\ "
+set fillchars=eob:\ ,diff:\ ,fold:\ ,foldclose:+,foldopen:-
 syntax on
 color gentooish
-highlight Normal                                ctermfg=249         ctermbg=none
-highlight LineNr        term=none   cterm=none  ctermfg=DarkGray    ctermbg=234    guibg=gray
-highlight CursorLine    term=none   cterm=none                      ctermbg=232    guibg=gray
-highlight CursorLineNr  term=none   cterm=none  ctermfg=250         ctermbg=234
-highlight ColorColumn   term=none   cterm=none  ctermfg=red         ctermbg=234    guibg=lightred
-highlight VertSplit                 cterm=none  ctermfg=black       ctermbg=none
-highlight Folded                                ctermfg=142         ctermbg=none
-highlight SignColumn                                                ctermbg=none
 
-" asdka jsdlkjas kldj aslkdj aslkdj laksjd lkasjd lkasjd lkasj dlkajs dlkajs dlkjas ldkjas lkdj aslkjd laksuj dlkasj dlkjas ldkja slkdjasd
+" Note for colors:
+" 232 (near-black) has more priority than just "black", thus we are
+" using it here to force colors (or syntax highlight will override sometimes)
 
-highlight NvimTreeFolderName ctermfg=blue
-highlight NvimTreeOpenedFolderName ctermfg=blue
-highlight NvimTreeSymlink ctermfg=cyan
-highlight NvimTreeExecFile ctermfg=green
-highlight NvimTreeOpenedFile ctermfg=yellow
+"           Generic
+highlight   Normal                    cterm=none     ctermfg=249        ctermbg=none
+highlight   LineNr                    cterm=none     ctermfg=DarkGray   ctermbg=234
+highlight   CursorLine                cterm=none     ctermbg=232
+highlight   CursorLineNr              cterm=none     ctermfg=250        ctermbg=234
+highlight   ColorColumn               cterm=none     ctermfg=red        ctermbg=234
+highlight   VertSplit                 cterm=none     ctermfg=232        ctermbg=none
+highlight   Folded                    cterm=none     ctermfg=136        ctermbg=none
+highlight   SignColumn                cterm=none     ctermbg=none
+highlight   Search                    cterm=none     ctermfg=232        ctermbg=131
+highlight   IncSearch                 cterm=none     ctermfg=232        ctermbg=226
+
+highlight   FoldColumn                cterm=none     ctermbg=233        ctermfg=238
+"           Regular-patches
+highlight   diffAdded                 cterm=none     ctermbg=none       ctermfg=darkgreen
+highlight   diffRemoved               cterm=none     ctermbg=none       ctermfg=darkred
+
+"           diff-mode
+highlight   DiffText                  cterm=none     ctermbg=219        ctermfg=232
+"highlight  DiffText                  cterm=reverse  ctermbg=none       ctermfg=none
+highlight   DiffAdd                   cterm=none     ctermbg=22
+highlight   DiffDelete                cterm=none     ctermbg=124
+highlight   DiffChange                cterm=none     ctermbg=53
+
+"           NvimTree
+highlight   NvimTreeFolderName        cterm=none     ctermfg=blue
+highlight   NvimTreeOpenedFolderName  cterm=none     ctermfg=blue
+highlight   NvimTreeSymlink           cterm=none     ctermfg=cyan
+highlight   NvimTreeExecFile          cterm=none     ctermfg=green
+highlight   NvimTreeOpenedFile        cterm=none     ctermfg=yellow
+
+" if &diff
 
 " if has('nvim')
 "     highlight ActiveWindow ctermbg=none
@@ -259,15 +349,15 @@ match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
 " Highlight current line only in active pane
 augroup cline
-    au!
-    au WinLeave * set nocursorline
-    au WinEnter * set cursorline
+au!
+au WinLeave * set nocursorline
+au WinEnter * if !&diff | set cursorline | endif
 augroup END
 
 augroup fastescape
-    au!
-    au InsertEnter * set timeoutlen=0
-    au InsertLeave * set timeoutlen=1000
+au!
+au InsertEnter * set timeoutlen=0
+au InsertLeave * set timeoutlen=1000
 augroup END
 
 highlight ScrollView ctermbg=232
@@ -289,7 +379,7 @@ map <C-S-F11> i<C-^><Esc>
 imap <C-S-F11> <C-^>
 
 set langmap=ёйцукенгшщзхъфывапролджэячсмитьбю;`qwertyuiop[]asdfghjkl;'zxcvbnm\\,\.
-" Language conf }}}
+" Language config }}}
 
 " Copy/Paste {{{
 
@@ -304,7 +394,7 @@ map Y y$
 " 4. Paste from x11 selection by <leader>[p|P]
 set clipboard=
 if has('unnamedplus')
-    " if something selected -- put into X selection buffe
+    " if something selected -- put into X selection buffer
     if ! has('nvim')
         set clipboard+=autoselect
     endif
@@ -315,6 +405,9 @@ elseif has('unnamed')
     " if we can, use '*' register (X primary selection) by default
     set clipboard+=unnamed
 endif
+
+" free tilda
+map ~ <nop>
 
 " Allow to paste from x11 selection
 noremap <leader>p "*p
@@ -375,26 +468,26 @@ Plug 'lvimuser/lsp-inlayhints.nvim'
 Plug 'simrat39/rust-tools.nvim'
 
 " }}}
-" * symbols outline (aka new tagbar) symbols outline{
+" * symbols outline (aka new tagbar) symbols outline {{{
 lua <<EOF
 vim.g.symbols_outline = {
-    highlight_hovered_item = true,
-    relative_width = false,
-    width = 40,
-    show_guides = false,
-    show_numbers = true,
-    show_symbol_detail = false,
-    auto_preview = false,
-    keymaps = {
-        close = {},
-    },
-    symbols = {
-        Method = {icon='m', hl='TSMethod'},
-        Function = {icon='f', hl='TSFunction'},
-        Struct = {icon='S', hl='TSType'},
-        Interface = {icon='I', hl='TSType'},
-        Field = {icon='-', hl='TSField'},
-    }
+highlight_hovered_item = true,
+relative_width = false,
+width = 40,
+show_guides = false,
+show_numbers = true,
+show_symbol_detail = false,
+auto_preview = false,
+keymaps = {
+    close = {},
+},
+symbols = {
+    Method = {icon='m', hl='TSMethod'},
+    Function = {icon='f', hl='TSFunction'},
+    Struct = {icon='S', hl='TSType'},
+    Interface = {icon='I', hl='TSType'},
+    Field = {icon='-', hl='TSField'},
+}
 }
 EOF
 hi FocusedSymbol ctermbg=black ctermfg=green
@@ -461,31 +554,31 @@ let g:semshi#self_to_attribute = v:true
 let g:semshi#error_sign = v:false
 
 augroup ft_python
-    au!
-    au FileType python noremap <silent> <Tab> :Semshi goto name next<CR>
-    au FileType python noremap <silent> <S-Tab> :Semshi goto name prev<CR>
-    au FileType python noremap <silent> <S-Right> :Semshi goto name next<CR>
-    au FileType python noremap <silent> <S-Left> :Semshi goto name prev<CR>
-    au FileType python noremap <silent> <S-Down> :Semshi goto function next<CR>
-    au FileType python noremap <silent> <S-Up> :Semshi goto function prev<CR>
+au!
+au FileType python noremap <silent> <Tab> :Semshi goto name next<CR>
+au FileType python noremap <silent> <S-Tab> :Semshi goto name prev<CR>
+au FileType python noremap <silent> <S-Right> :Semshi goto name next<CR>
+au FileType python noremap <silent> <S-Left> :Semshi goto name prev<CR>
+au FileType python noremap <silent> <S-Down> :Semshi goto function next<CR>
+au FileType python noremap <silent> <S-Up> :Semshi goto function prev<CR>
 augroup END
 
 function TuneSemshiHL()
-    hi SemshiSelected   ctermfg=none ctermbg=236
-    hi SemshiAttribute  ctermfg=37
-    hi SemshiSelf       ctermfg=31
-    "hi SemshiSelf       ctermfg=246
-    hi SemshiUnresolved ctermfg=227 cterm=none
-    hi SemshiFree       ctermfg=38 cterm=underline
-    hi SemshiLocal      ctermfg=74
-    hi SemshiGlobal     ctermfg=38
-    hi SemshiImported   ctermfg=214 cterm=none
-    hi SemshiBuiltin    ctermfg=38
-    hi Error            ctermbg=none
+hi SemshiSelected   ctermfg=none ctermbg=236
+hi SemshiAttribute  ctermfg=37
+hi SemshiSelf       ctermfg=31
+"hi SemshiSelf       ctermfg=246
+hi SemshiUnresolved ctermfg=227 cterm=none
+hi SemshiFree       ctermfg=38 cterm=underline
+hi SemshiLocal      ctermfg=74
+hi SemshiGlobal     ctermfg=38
+hi SemshiImported   ctermfg=214 cterm=none
+hi SemshiBuiltin    ctermfg=38
+hi Error            ctermbg=none
 endfunction
 
 function Rename()
-    :Semshi rename
+:Semshi rename
 endfunction
 
 noremap <silent> <leader>re :Semshi rename<CR>
@@ -507,7 +600,7 @@ let g:vimwiki_auto_checkbox = 1
 let g:vimwiki_table_mappings = 0
 let g:vimwiki_table_auto_fmt = 0
 let g:vimwiki_list = [{
-    \'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'
+\'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'
 \}]
 au FileType vimwiki set shiftwidth=2 tabstop=2 softtabstop=2
 " }}}
@@ -618,17 +711,17 @@ let g:NERDChristmasTree = 1
 let g:NERDTreeDirArrows = 0
 let g:NERDTreeGitStatusShowIgnored = 1 " can have huge performance cost
 let g:NERDTreeGitStatusIndicatorMapCustom = {
-    \ "Modified"  : "mod",
-    \ "Staged"    : "stg",
-    \ "Untracked" : "unt",
-    \ "Renamed"   : "rnm",
-    \ "Unmerged"  : "unm",
-    \ "Deleted"   : "del",
-    \ "Dirty"     : "unt",
-    \ "Clean"     : "cln",
-    \ 'Ignored'   : 'ign',
-    \ "Unknown"   : "unk"
-    \ }
+\ "Modified"  : "mod",
+\ "Staged"    : "stg",
+\ "Untracked" : "unt",
+\ "Renamed"   : "rnm",
+\ "Unmerged"  : "unm",
+\ "Deleted"   : "del",
+\ "Dirty"     : "unt",
+\ "Clean"     : "cln",
+\ 'Ignored'   : 'ign',
+\ "Unknown"   : "unk"
+\ }
 let g:NERDTreeDirArrowExpandable = '+'
 let g:NERDTreeDirArrowCollapsible = '-'
 "noremap <F2> :NERDTreeToggle<cr>
@@ -649,29 +742,29 @@ let g:tagbar_iconchars = ['+', '-']
 let g:tagbar_left = 0
 
 fun! ActivateWindow(name)
-    let l:bufid = bufnr(a:name)
-    let l:winids = win_findbuf(l:bufid)
-    if len(l:winids) > 0
-        " return l:winids[0]
-        call win_gotoid(l:winids[0])
-    endif
-    return -1
+let l:bufid = bufnr(a:name)
+let l:winids = win_findbuf(l:bufid)
+if len(l:winids) > 0
+    " return l:winids[0]
+    call win_gotoid(l:winids[0])
+endif
+return -1
 endfun
 
 fun! OutlineWin()
-    let l:cwin = win_findbuf(bufnr())[0]
-    let l:outwin = ActivateWindow('OUTLINE')
+let l:cwin = win_findbuf(bufnr())[0]
+let l:outwin = ActivateWindow('OUTLINE')
 
-    :SymbolsOutlineOpen
+:SymbolsOutlineOpen
 
-    " call win_gotoid(l:outwin)
+" call win_gotoid(l:outwin)
 
-    " if l:outwin != -1
-    "     " echo l:outwin
-    "     " call win_gotoid(l:outwin)
-    " else
-    "     call win_gotoid(l:cwin)
-    " endif
+" if l:outwin != -1
+"     " echo l:outwin
+"     " call win_gotoid(l:outwin)
+" else
+"     call win_gotoid(l:cwin)
+" endif
 endfun
 
 "map <F9> :TagbarOpen -fj<cr>
@@ -759,12 +852,94 @@ Plug 'wakatime/vim-wakatime'
 "            \ }
 
 " }}}
+" * vim-highlight-match-under-cursor {{{
+Plug 'https://github.com/adamheins/vim-highlight-match-under-cursor'
+"let g:HighlightMatchUnderCursor_highlight_args = 'cterm=none ctermbg=yellow ctermfg=none'
+let g:HighlightMatchUnderCursor_highlight_link_group = 'IncSearch'
+" }}}
 
 call plug#end() " }}}
+
+" Folding {{{
+set foldlevelstart=99
+set foldmethod=marker
+set foldlevel=99
+
+lua <<EOF
+function custom_fold_text()
+    local foldm = '{' .. '{' .. '{'
+
+    local line = vim.fn.getline(vim.v.foldstart)
+    local line = line:gsub('\t', '    ')
+    local line = line:gsub(foldm, '')
+    local line = line:gsub('^(.-)[{#:%s]*$', '%1')
+    -- local line = line:gsub('^(.-)[{:]$', 'R%1R')
+
+    local foldcount = vim.v.foldend - vim.v.foldstart
+
+    local rtext = '(' .. foldcount .. ' lines)'
+    local target = 80
+    local left = target - line:len() - rtext:len()
+
+    if left > 0 then
+        line = line .. string.rep(' ', left) .. rtext
+        return line
+    end
+
+
+    -- str:rep('what', 123)
+
+    return line .. ' +++ (' .. foldcount .. ' lines' .. ')'
+end
+vim.opt.foldtext='v:lua.custom_fold_text()'
+EOF
+
+nnoremap <silent> zj :call NextClosedFold('j')<cr>
+nnoremap <silent> zk :call NextClosedFold('k')<cr>
+nnoremap <silent> <C-PageDown> :call NextClosedFold('j')<cr>
+nnoremap <silent> <C-PageUp> :call NextClosedFold('k')<cr>
+
+function! NextClosedFold(dir)
+    let cmd = 'norm!z'..a:dir
+    let view = winsaveview()
+    let [l0, l, open] = [0, view.lnum, 1]
+    while l != l0 && open
+        exe cmd
+        let [l0, l] = [l, line('.')]
+        let open = foldclosed(l) < 0
+    endwhile
+    if open
+        call winrestview(view)
+    endif
+endfunction
+" }}}
 
 " TreeSitter config
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
+
+" Tune diff mode {{{
+if &diff
+    set nocursorline
+    set foldlevel=99
+    set foldlevelstart=99
+    set nofoldenable
+
+    map  <A-PageUp>    [c
+    map  <A-PageDown>  ]c
+    map  <S-Up>        [c
+    map  <S-Down>      ]c
+    map  <S-Left>      dozv]c
+    map  <S-Right>     dpzv]c
+
+    augroup diffconf
+        au!
+        au WinEnter * if &diff |
+                    \   call feedkeys('zRgg]c', 't') |
+                    \ endif
+    augroup END
+endif
+" }}}
 
 " Tune specific file types {{{
 " ReST {{{
@@ -773,7 +948,6 @@ augroup ft_rest
     au FileType rst set textwidth=78 tabstop=3 shiftwidth=3 softtabstop=3
 augroup END
 " ReST }}}
-
 " Go (golang) {{{
 fun! GoFumpt()
     :silent !gofumpt -w %
@@ -790,8 +964,9 @@ augroup ft_go
 augroup END
 
 " Go }}}
+" All {{{
+autocmd BufWritePre * :%s/\s\+$//e
 
-" All {{
 let g:skipview_files = [
             \ '[BufExplorer]',
             \ 'NERD_tree_1'
@@ -856,7 +1031,6 @@ noremap <silent> <Home> ^
 inoremap <silent> <Home> <C-o>^
 
 " Tune specific file types }}}
-
 " Fix tmux/xterm keys {{{
 if &term =~ '^screen'
     " tmux will send xterm-style keys when xterm-keys is on
@@ -876,3 +1050,5 @@ set whichwrap+=<,>,[,],h,l
 lua require('main') -- from .config/vim/lua/main.lua
 
 hi LspInlayHint ctermfg=238
+
+" }}}

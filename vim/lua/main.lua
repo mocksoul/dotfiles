@@ -42,7 +42,7 @@ require('nvim-treesitter.configs').setup {
     ensure_installed = {'c', 'lua', 'go', 'gomod', 'python'},
     sync_install = false,
     auto_install = true,
-    ignore_install = {},
+    ignore_install = { help },
     highlight = {
         enable = true,
         disable = {},  -- e.g. rust
@@ -185,29 +185,34 @@ require('nvim-lightbulb').setup({
     },
 })
 
-if true then
-require('satellite').setup({
-    current_only = false,
-    winblend = 0,
-    zindex = 40,
-    excluded_filetypes = {},
-    width = 2,
-    handlers = {
-        search = {
-            enable = true,
+
+local use_satellite = true
+
+if vim.api.nvim_win_get_option(0, 'diff') then use_satellite = false end
+
+if use_satellite then
+    require('satellite').setup({
+        current_only = false,
+        winblend = 0,
+        zindex = 40,
+        excluded_filetypes = {},
+        width = 2,
+        handlers = {
+            search = {
+                enable = true,
+            },
+            diagnostic = {
+                enable = true,
+            },
+            gitsigns = {
+                enable = true,
+            },
+            marks = {
+                enable = true,
+                show_builtins = false, -- shows the builtin marks like [ ] < >
+            },
         },
-        diagnostic = {
-            enable = true,
-        },
-        gitsigns = {
-            enable = true,
-        },
-        marks = {
-            enable = true,
-            show_builtins = false, -- shows the builtin marks like [ ] < >
-        },
-    },
-})
+    })
 end
 
 require('trouble').setup({

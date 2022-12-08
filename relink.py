@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.9
+#!/usr/bin/env python3
 
 import argparse
 # import collections
@@ -21,8 +21,8 @@ items = [
     '~/.bash_profile',                      '~/.config/bash/bash_profile',
     '~/.bash_logout',                       '~/.config/bash/bash_logout',
 
-    'o/vim',                                '~/.config/vim',
-    '~/.vimrc',                             '~/.config/vim/vimrc',
+    'o/vim',                                '~/.config/nvim',
+    '~/.vimrc',                             '~/.config/nvim/init.vim',
     '~/.vim/view',                          '~/.local/share/nvim/view',                         NOREL,
 
     'o/tmux',                               '~/.config/tmux',
