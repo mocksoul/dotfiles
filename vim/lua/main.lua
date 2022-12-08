@@ -54,6 +54,7 @@ require('nvim-treesitter.configs').setup {
         max_file_lines = nil,
     },
 }
+
 require('hlargs').setup()
 
 vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
@@ -319,7 +320,7 @@ cmp.setup({
         -- { name = 'nvim_lsp_signature_help' },
     }, {
         { name = 'buffer' },
-    }), 
+    }),
 })
 
 cmp.setup.cmdline(':', {
@@ -627,7 +628,7 @@ require('nvim-tree').setup({
 
 require('telescope').setup({
     defaults = {
-        path_display = function(opts, path) 
+        path_display = function(opts, path)
             local path = path:gsub('/home/mocksoul/workspace/noc/arc/arcadia/library/go/', 'LIB:')
             --local path = path:gsub('/home/mocksoul/workspace/noc/arc/arcadia/noc/invapi', 'a/invapi')
             --local path = path:gsub('/home/mocksoul/workspace/noc/arc/arcadia/noc', 'a/noc')
