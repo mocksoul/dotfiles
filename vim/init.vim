@@ -179,10 +179,12 @@ function smartqsearch()
 
         if cnt > 1 then
             vim.cmd('normal nN')
-        else
+        elseif cnt == 1 then
             vim.cmd('normal n')
         end
 
+        -- we want to put cursor to start of search word
+        -- thus we dont want to restore col here
         ret.col = nil
         vim.api.nvim_call_function('winrestview', { ret })
     else
@@ -190,7 +192,7 @@ function smartqsearch()
         -- if we are already on search word -- center it on screen
         if cnt > 1 then
             vim.cmd('normal nN')
-        else
+        elseif cnt == 1 then
             vim.cmd('normal n')
         end
     end
