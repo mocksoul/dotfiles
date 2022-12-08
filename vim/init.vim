@@ -531,9 +531,9 @@ let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not
 let g:NERDToggleCheckAllLines = 1
 
-nnoremap <silent> <F3> :call nerdcommenter#Comment('n', 'Toggle')<CR>
-inoremap <silent> <F3> <C-o>:call nerdcommenter#Comment('n', 'Toggle')<CR>
-vnoremap <silent> <F3> :call nerdcommenter#Comment('x', 'Toggle')<CR>
+nnoremap <silent> <F3> :call nerdcommenter#Comment('n', 'Toggle')<CR>zR
+inoremap <silent> <F3> <C-o>:call nerdcommenter#Comment('n', 'Toggle')<CR>zR
+vnoremap <silent> <F3> :call nerdcommenter#Comment('x', 'Toggle')<CR>zR
 
 autocmd FileType python let g:NERDSpaceDelims = 0
 " }}}
