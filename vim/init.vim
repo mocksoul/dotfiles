@@ -26,7 +26,7 @@ set nolazyredraw                   " do not redraw while running macros (much fa
 set nostartofline                " try to preserve cursor pos during PgUp/PgDn
 set noswapfile                   " swap file is not needed as well
 set nowritebackup                " dont want backups anymore
-set number                       " show line numbers by default
+set number relativenumber        " show line numbers by default
 set pastetoggle=<F6>
 set ruler                        " always show
 set shiftround
@@ -81,6 +81,12 @@ augroup line_return
         \ if line("'\"") > 0 && line("'\"") < line("$") |
         \    execute 'normal! g`"zvzz' |
         \ endif
+augroup END
+
+augroup number_toggle
+    au!
+    au BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set nu rnu   | endif
+    au BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nu nornu | endif
 augroup END
 
 augroup filetypedetect
@@ -307,9 +313,9 @@ color gentooish
 
 "           Generic
 highlight   Normal                    cterm=none     ctermfg=249        ctermbg=none
-highlight   LineNr                    cterm=none     ctermfg=DarkGray   ctermbg=234
-highlight   CursorLine                cterm=none     ctermbg=232
-highlight   CursorLineNr              cterm=none     ctermfg=250        ctermbg=234
+highlight   LineNr                    cterm=none     ctermfg=242        ctermbg=234
+highlight   CursorLine                cterm=none                        ctermbg=black
+highlight   CursorLineNr              cterm=none     ctermfg=242        ctermbg=black
 highlight   ColorColumn               cterm=none     ctermfg=red        ctermbg=234
 highlight   VertSplit                 cterm=none     ctermfg=232        ctermbg=none
 highlight   Folded                    cterm=none     ctermfg=136        ctermbg=none
