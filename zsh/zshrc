@@ -8,7 +8,7 @@ alias td='todo -s +children'
 alias t='task'
 alias sdev='ssh dev'
 
-export EDITOR=/usr/bin/vim
+export EDITOR=vim
 #export PATH="/usr/libexec/cw:$PATH"
 
 export VISUAL=vim
@@ -17,6 +17,18 @@ zle -N edit-command-line
 bindkey -M vicmd v edit-command-line
 bindkey '^x^e' edit-command-line
 bindkey '^xe' edit-command-line
+
+# chars which zsh treat as part of word
+export WORDCHARS="*?_-.[]~=/:&!#$%^(){}"
+
+
+#export WORDCHARS="*?_-.[]~=&!#$%^(){}<>"
+#autoload select-word-style
+#select-word-style shell
+
+#bindkey '^[[H' beginning-of-line
+#bindkey '^[[F' end-of-line
+#bindkey '^[[3' delete-char
 
 export CW_NORANDOM=1
 export CW_COLORIZE=brown:yellow
@@ -33,13 +45,65 @@ alias nmon='nmon -s 1'
 #)
 
 fgvim() {
-    fg %nvim
+    jobs -s %sudo\ vim >/dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        fg %sudo\ vim >/dev/null 2>&1
+    else
+        jobs -s %vim >/dev/null 2>&1
+        if [ $? -eq 0 ]; then
+            fg %vim >/dev/null 2>&1
+        fi
+    fi
 }
 
 zle -N fgvim
 bindkey '^Z' fgvim
+
+cmdhelp() {
+    [ "$BUFFER" = "" ] && return
+
+    lpart="${LBUFFER/*[ ,=\"]/}"  # grab everything from leftpart from right except some symbols
+    rpart="${RBUFFER/[ ,=\"]*/}"  # grab everything from rightpart from left except some symbols
+
+    word="${lpart}${rpart}"
+    cmdl="${LBUFFER/*;/}"   # grab 'asd asd;[ this one ]'
+    cmdr="${RBUFFER/ */}"   # grab 'asd asd;  '
+    cmd="${cmdl}${cmdr}"
+    cmd="${cmd}"
+    cmd="${cmd## }"         # cut any space from beginning
+    cmd="${cmd%% }"         # cut any space from the end just to be sure :)
+    cmd="${cmd/ */}"        # grab first word
+
+    if [ 0 -eq 1 ]; then
+        # debug
+        zle push-input
+        zle -U "x${word}xcmd:${cmd}"
+        return
+    fi
+
+    if [ ! "$word" = "" ]; then
+        # avoid searching for empty string
+        search=" -c 'silent! / $word'"
+    fi
+
+    nb="${cmd} --help 2>&1 | nvimpager -a -- -c 'set syntax=man' $search"
+    zsh -c "${nb[@]}"
+}
+zle -N cmdhelp
+bindkey '^[OP' cmdhelp
+
+#bindkey -s '^[OP' ' --help | nvimpager -a -- -c "set syntax=man" ^M'
+
 bindkey '^[[1;5D' backward-word
 bindkey '^[[1;5C' forward-word
+
+# note: use "fc -R" for reloading history before search
+bindkey '^R' history-incremental-search-backward
+bindkey '^F' history-incremental-search-forward
+
+bindkey '^T' history-incremental-pattern-search-backward
+
+#bindkey '^G' history-incremental-pattern-search-forward
 
 savefullhist() {
     local C=${1%%$'\n'}
@@ -58,7 +122,7 @@ savefullhist() {
 stty -ixon
 
 # Add wakatime plugin
-source ~/.local/share/zsh/plug/wakatime/wakatime.plugin.zsh
+#source ~/.local/share/zsh/plug/wakatime/wakatime.plugin.zsh
 
 tmux_session() {
     local session_name="$1"
@@ -122,7 +186,7 @@ tmux_update_environment() {
     echo "Updated: $updated; removed: $removed"
 }
 
-[[ $YAKUAKE == 1 || $ALACRITTYQUAKE == 1 ]] && tmux_session yakuake
+#[[ $YAKUAKE == 1 || $ALACRITTYQUAKE == 1 ]] && tmux_session yakuake
 if [[ $SHELL_WORK_SKYNET == 1 ]]; then
     unset SHELL_WORK_SKYNET
     tmux_session skynet
@@ -138,8 +202,9 @@ fi
 export PATH="$HOME/.local/bin:$PATH"
 
 alias sshome='ssh home'
+alias sshomem='ssh mocksoul@home'
 
-alias vim='nvim -u ~/.vimrc'
+#alias vim='TERM=xterm-256color nvim -u ~/.vimrc'
 alias vi='vim'
 
 function git() {
@@ -156,3 +221,7 @@ function git() {
 
 alias gi='git'
 alias lg='lazygit'
+
+export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+
+alias pager='eval $PAGER'
