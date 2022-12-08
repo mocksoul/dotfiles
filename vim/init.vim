@@ -1006,7 +1006,9 @@ endfunction
 augroup vimrcAutoView
     autocmd!
     " Autosave & Load Views.
-    autocmd BufWritePost,BufLeave,WinLeave ?* if MakeViewCheck() | mkview | endif
+    " note: also WinScrolled can be used here, but since we are saving everything
+    " on quit it is not that much needed
+    autocmd ModeChanged,BufWritePost,BufLeave,WinLeave,VimLeave,VimSuspend ?* if MakeViewCheck() | mkview | endif
     autocmd BufWinEnter ?* if MakeViewCheck() | silent! loadview | endif
 augroup end
 augroup vimrcUnfuckSyntaxOnSave
