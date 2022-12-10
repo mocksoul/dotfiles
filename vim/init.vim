@@ -445,6 +445,7 @@ Plug 'weilbith/nvim-code-action-menu'
 Plug 'williamboman/mason.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-context'
+Plug 'nvim-treesitter/playground'
 Plug 'm-demare/hlargs.nvim'
 Plug 'lewis6991/satellite.nvim'
 Plug 'nvim-lua/lsp-status.nvim'
