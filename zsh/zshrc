@@ -19,7 +19,7 @@ bindkey '^x^e' edit-command-line
 bindkey '^xe' edit-command-line
 
 # chars which zsh treat as part of word
-export WORDCHARS="*?_-.[]~/:&!#$%^(){}"
+export WORDCHARS="*?_-.[]~/:&!#$%^(){}\""
 
 
 #export WORDCHARS="*?_-.[]~=&!#$%^(){}<>"
