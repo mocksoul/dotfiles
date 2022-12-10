@@ -55,6 +55,11 @@ require('nvim-treesitter.configs').setup {
     },
 }
 
+require('treesitter-context').setup({
+    mode = 'topline',  -- or 'cursor'
+    separator = '-',
+})
+
 require('hlargs').setup()
 
 vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
