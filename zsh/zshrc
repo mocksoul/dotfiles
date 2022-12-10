@@ -226,6 +226,9 @@ export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 
 alias pager='eval $PAGER'
 
+export VIMCONF=~/.config/nvim/init.vim
+export VIMLUA=~/.config/nvim/lua/main.lua
+
 function syncvim() {
     if [ ! "$1" = "" ]; then
         hosts=($@)
