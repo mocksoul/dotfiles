@@ -912,6 +912,7 @@ key_bindings:
   - { key: End,        mods: Shift,         mode: Vi|~Search,   action: Last                    }
   - { key: Key4,                            mode: Vi|~Search,   action: Last                    }
   - { key: Key6,                            mode: Vi|~Search,   action: FirstOccupied           }
+  - { key: Key5,                            mode: Vi|~Search,   action: Bracket                 }
   - { key: G,                               mode: Vi|~Search,   action: ScrollToTop             }
   - { key: G,                               mode: Vi|~Search,   action: Low                     }
 
