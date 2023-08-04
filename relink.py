@@ -39,8 +39,7 @@ items = [
     '~/.tigrc',                             '~/.config/git/tigrc',
     '~/.local/bin/lazygit',                 '~/go/src/github.com/jesseduffield/lazygit/lazygit', NOREL,
 
-    'o/top',                                '~/.config/top',
-    '~/.toprc',                             '~/.config/top/toprc',
+    'o/top',                                '~/.config/procps',
 
     'o/arc',                                '~/.config/arc',
     '~/.arcconfig',                         '~/.config/arc/arcconfig',
