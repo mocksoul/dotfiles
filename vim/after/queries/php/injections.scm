@@ -20,3 +20,38 @@
     )
   )
 )
+
+(heredoc
+  identifier: (heredoc_start) @_h_name
+  (#lua-match? @_h_name "SQL")
+  value:
+  (heredoc_body) @sql
+)
+
+
+(heredoc
+  (comment) @value (#lua-match? @value "SQL")
+  value:
+  (heredoc_body) @sql
+)
+
+(array_element_initializer
+  (comment) @comment (#lua-match? @comment "SQL")
+  (heredoc
+    (heredoc_body) @sql
+  )
+)
+
+(array_element_initializer
+  (comment) @comment (#lua-match? @comment "SQL")
+  (string
+    (string_value) @sql
+  )
+)
+
+(array_element_initializer
+  (comment) @comment (#lua-match? @comment "SQL")
+  (encapsed_string
+    (string_value) @sql
+  )
+)
