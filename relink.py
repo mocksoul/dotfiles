@@ -41,6 +41,7 @@ items = [
     "~/.local/bin/lazygit",                 "~/go/src/github.com/jesseduffield/lazygit/lazygit", NOREL,
 
     "o/top",                                "~/.config/procps",
+    "o/htop",                               "~/.config/htop",
 
     "o/arc",                                "~/.config/arc",
     "~/.arcconfig",                         "~/.config/arc/arcconfig",
