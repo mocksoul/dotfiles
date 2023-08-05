@@ -1,0 +1,40 @@
+line-length = 120
+select = ["ALL"]
+ignore = [
+    #"ANN",
+    "D",
+    "ERA001",   # commented out code
+    "PLW0603",  # allow globals
+    "T201",     # allow print
+    "G004",     # allow f-strings in logging
+    "S603",     # check execution of untrusted input (subprocess)
+    "FBT001",   # boolean positional arg in functions
+    "FBT002",   # boolean default value in functions
+    "FBT003",   # boolean positional value in functions
+    "PLR0913",  # too many args to function
+    "PLR5501",  # use elif instead of else+if
+    "PLW2901",  # loop variable overwritten
+]
+
+[isort.sections]
+semi-first-party = [
+    "aiortapi",
+]
+
+[isort]
+lines-between-types = 0  # between import and from
+force-single-line = true
+# relative-imports-order = "closest-to-furthest"
+relative-imports-order = "furthest-to-closest"
+# section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "semi-first-party",
+    "first-party",
+    "local-folder",
+]
+known-first-party = [
+    "noc",
+]
