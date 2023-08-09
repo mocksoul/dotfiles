@@ -1,5 +1,5 @@
 [core]
-pager = bat --paging=auto --pager 'less -RXFe' -p
+pager = bat --paging=auto --pager 'less -RXF' -p
 #pager = bat -p -l gitlog
 
 

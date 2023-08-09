@@ -12,3 +12,6 @@
 **/pahom/bak
 **/pahom/scripts
 **/pahom/bin/apid/contrib
+**/noc/invapi/.temp
+**/noc/invapi/**/.gitignore
+**/noc/*docs/x/**
