@@ -11,6 +11,8 @@
 [github]
     user = mocksoul@gmail.com
     token = 81c10b7d48acd7e8e668afac74736f03
+[push]
+    autoSetupRemote = true
 [alias]
     l = log --graph --pretty=mline -n30 --date-order
     ll = log --graph -n10 --date-order
