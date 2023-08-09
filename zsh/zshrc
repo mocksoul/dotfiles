@@ -238,9 +238,9 @@ function syncvim() {
 
     for h in $hosts; do
         echo "syncing $h..."
-        ssh $h 'rm -rf .vimrc .config/vim .config/nvim .local/share/nvim /usr/local/share/nvimpager && mkdir -p .config/nvim /usr/local/share' && \
-            rsync -a --delete .config/nvim/. $h:.config/nvim/ && \
-            rsync -a --delete .local/share/nvim $h:.local/share/ && \
+        ssh $h 'rm -rf .vimrc .config/vim .config/nvim .local/share/nvim /usr/local/share/nvimpager && mkdir -p .config/nvim .local/share/nvim /usr/local/share' && \
+            rsync -a --delete ~/.config/nvim/. $h:.config/nvim/ && \
+            rsync -a --delete ~/.local/share/nvim $h:.local/share/ && \
             rsync -a /usr/local/share/nvimpager $h:/usr/local/share/ && \
             rsync -a /usr/local/bin/nvimpager $h:/usr/local/bin/nvimpager && \
             ssh $h "ln -snf ~/.config/nvim/init.vim ~/.vimrc" &&
