@@ -1,5 +1,5 @@
 [$Version]
-update_info=spectacle_shortcuts.upd:spectacle-migrate-shortcuts,konsole_globalaccel.upd:konsole_globalaccel
+update_info=spectacle_shortcuts.upd:spectacle-migrate-shortcuts,konsole_globalaccel.upd:konsole_globalaccel,konsole.upd:konsole_globalaccel
 
 [ColorEffects:Disabled]
 ChangeSelectionColor[$d]
@@ -306,7 +306,7 @@ Uuid={a314c07a-4408-480b-94a8-ed1563ab860f}
 
 [Data_5]
 Comment=Comment
-Enabled=true
+Enabled=false
 Name=Wezterm
 Type=SIMPLE_ACTION_DATA
 
@@ -333,7 +333,7 @@ Uuid={a6f8e6ea-5451-4d99-9927-0ceabf10afff}
 [Data_6]
 Comment=Comment
 DataCount=2
-Enabled=true
+Enabled=false
 Name=MQuake
 SystemGroup=0
 Type=ACTION_DATA_GROUP
