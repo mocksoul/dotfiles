@@ -42,9 +42,10 @@
 [pretty]
     mline = "format:%C(yellow)%h %Creset- %C(brightwhite)%s %C(brightred)%D %C(brightblack)%ar %C(white)%cl %Creset"
 [diff]
-    tool = meld
+    tool = vimdiff
 [merge]
-    tool = meld
+    tool = vimdiff
+    summary = true
 [gui]
     editor = alacritty -e vim --
     historybrowser = gitk
