@@ -39,6 +39,7 @@
     statusshowtotals = true
     statusindent = false
     blameviewer = git gui blame
+    fontdiff = Monospace,8,-1,5,50,0,0,0,0,0
 [pretty]
     mline = "format:%C(yellow)%h %Creset- %C(brightwhite)%s %C(brightred)%D %C(brightblack)%ar %C(white)%cl %Creset"
 [diff]
@@ -49,3 +50,4 @@
 [gui]
     editor = alacritty -e vim --
     historybrowser = gitk
+    tabsize = 4
