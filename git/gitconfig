@@ -26,6 +26,7 @@
     incoming = "!B=$(git branch --show-current); echo fetching...; git fetch origin; git l -n9999 $B..origin/$B \"$@\""
     inc = incoming
     mockmerge = "!f() { for M in $@; do :; done; B=$(git branch --show-current) && git merge --no-ff -m \"merge ($M => $B)\" --log -e \"$@\"; }; f"
+    dropmerged = "!git branch --merged master | grep  -v '\\*\\|master\\|develop\\|_dev' | xargs -n 1 -r git branch -d"
 [man]
     viewer = catman
 [man "catman"]
