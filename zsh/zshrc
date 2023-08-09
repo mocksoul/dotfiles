@@ -59,20 +59,21 @@ fgvim() {
 zle -N fgvim
 bindkey '^Z' fgvim
 
+# <F1> to run help or man
 cmdhelp() {
     [ "$BUFFER" = "" ] && return
 
-    lpart="${LBUFFER/*[ ,=\"]/}"  # grab everything from leftpart from right except some symbols
-    rpart="${RBUFFER/[ ,=\"]*/}"  # grab everything from rightpart from left except some symbols
+    lpart="${LBUFFER/*[ ,=\"]/}"    # grab everything from leftpart from right except some symbols
+    rpart="${RBUFFER/[ ,=\"]*/}"    # grab everything from rightpart from left except some symbols
 
     word="${lpart}${rpart}"
-    cmdl="${LBUFFER/*;/}"   # grab 'asd asd;[ this one ]'
-    cmdr="${RBUFFER/ */}"   # grab 'asd asd;  '
+    cmdl="${LBUFFER/*[;\|]/}"       # grab 'asd asd;[ this one ]'  (cut from ; or |)
+    cmdr="${RBUFFER/[ ;\|]*/}"      # grab 'asd asd;  '        (first word, cut from ; or | if needed)
     cmd="${cmdl}${cmdr}"
     cmd="${cmd}"
-    cmd="${cmd## }"         # cut any space from beginning
-    cmd="${cmd%% }"         # cut any space from the end just to be sure :)
-    cmd="${cmd/ */}"        # grab first word
+    cmd="${cmd## }"                 # cut any space from beginning
+    cmd="${cmd%% }"                 # cut any space from the end just to be sure :)
+    cmd="${cmd/ */}"                # grab first word
 
     if [ 0 -eq 1 ]; then
         # debug
@@ -83,7 +84,7 @@ cmdhelp() {
 
     if [ ! "$word" = "" ]; then
         # avoid searching for empty string
-        search=" -c 'silent! / $word'"
+        search=" -c 'silent! / $word' -c 'silent! :normal n'"
     fi
 
     nb="${cmd} --help 2>&1 | nvimpager -a -- -c 'set syntax=man' $search"
