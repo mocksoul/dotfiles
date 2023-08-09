@@ -36,7 +36,7 @@
     spellcheck = false
     tabwidth = 4
     expandtab = true
-    theme = flat-dark-grey
+    theme = flat-dark-red
     icontheme = dark
     boldheaders = true
     statusshowtotals = true
