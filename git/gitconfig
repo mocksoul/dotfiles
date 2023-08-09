@@ -29,9 +29,6 @@
     dropmerged = "!git branch --merged master | grep  -v '\\*\\|master\\|develop\\|_dev' | xargs -n 1 -r git branch -d"
 [man]
     viewer = catman
-[man "catman"]
-    #cmd = man -P \"bat -l man -pp\"
-    cmd = man -P \"manpager -RXe\"
 [cola]
     spellcheck = false
     tabwidth = 4
@@ -42,8 +39,6 @@
     statusshowtotals = true
     statusindent = false
     blameviewer = git gui blame
-[sequence]
-    editor = interactive-rebase-tool
 [pretty]
     mline = "format:%C(yellow)%h %Creset- %C(brightwhite)%s %C(brightred)%D %C(brightblack)%ar %C(white)%cl %Creset"
 [diff]
