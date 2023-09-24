@@ -8,12 +8,16 @@ ignore = [
     "T201",     # allow print
     "G004",     # allow f-strings in logging
     "S603",     # check execution of untrusted input (subprocess)
+    "S607",     # starting process with a partial executable path (some vs /bin/some)
     "FBT001",   # boolean positional arg in functions
     "FBT002",   # boolean default value in functions
     "FBT003",   # boolean positional value in functions
     "PLR0913",  # too many args to function
     "PLR5501",  # use elif instead of else+if
     "PLW2901",  # loop variable overwritten
+    "RET504",   # assigning variable before return unnecessary
+    "SIM108",   # use ternary operator (x = y if z else n)
+    "PERF401",  # enfore usage of list comprehension to create list (instead of append())
 ]
 
 [isort.sections]
