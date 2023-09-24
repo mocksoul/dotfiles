@@ -49,6 +49,7 @@ items = [
     "~/.arcignore.symlink",                 "~/.config/arc/arcignore.symlink",
 
     "o/ruff",                               "~/.config/ruff",
+    "o/qtile",                              "~/.config/qtile",
 ]
 
 
