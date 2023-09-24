@@ -201,6 +201,7 @@ fi
 
 #export PATH="$PATH:/home/mocksoul/Downloads/htcone/adt-bundle-linux-x86-20130522/sdk/platform-tools"
 export PATH="$HOME/.local/bin:$PATH"
+[[ $UID != 0 ]] && export SSH_AUTH_SOCK=/run/user/$UID/ssh-agent.sock
 
 alias sshome='ssh home'
 alias sshomem='ssh mocksoul@home'
