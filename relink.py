@@ -102,7 +102,7 @@ def relink(fix: bool = True, verbose: bool = False) -> None:
         srco, tgto = src, tgt
 
         if tgt.parts[0] == "O":
-            tgt = Path(".").absolute().joinpath(*tgt.parts[1:])
+            tgt = Path().absolute().joinpath(*tgt.parts[1:])
             src, tgt = tgt, src
             srco, tgto = tgto, srco
             opath = tgt
